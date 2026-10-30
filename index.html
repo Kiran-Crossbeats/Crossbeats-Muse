@@ -1,263 +1,463 @@
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Crossbeats MUSE | Open Wearable Stereo (OWS)</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <style>
-    body { background-color: #070709; color: #f4f4f5; font-family: 'Inter', sans-serif; }
-    .glass { background: rgba(20, 20, 25, 0.82); backdrop-filter: blur(14px); border: 1px solid rgba(255, 102, 0, 0.18); }
-    .card-hover { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-    .card-hover:hover { transform: translateY(-4px); border-color: rgba(255, 102, 0, 0.55); box-shadow: 0 20px 40px -15px rgba(255, 85, 0, 0.2); }
-    .orange-glow { background: radial-gradient(circle, rgba(255,85,0,0.18) 0%, rgba(7,7,9,0) 70%); }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Crossbeats MUSE | Open Wearable Stereo (OWS)</title>
+<meta name="description" content="Crossbeats Muse OWS — Open-ear earbuds with Bluetooth 6.0, 40H battery, 5-layer acoustic driver and premium ergonomic hook.">
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
+
+<style>
+  :root{
+    --orange:#ff6a00;
+    --amber:#ffb347;
+    --bg:#06060a;
+  }
+  html,body{background:var(--bg);color:#f4f4f5;font-family:'Inter',sans-serif;cursor:none;}
+  .font-display{font-family:'Space Grotesk',sans-serif;letter-spacing:-0.02em;}
+
+  /* --- Animated grid background --- */
+  .grid-bg{
+    position:fixed;inset:0;z-index:-2;
+    background-image:
+      linear-gradient(rgba(255,106,0,0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,106,0,0.05) 1px, transparent 1px);
+    background-size:60px 60px;
+    mask-image:radial-gradient(ellipse at center, black 20%, transparent 70%);
+  }
+  .orb{position:fixed;border-radius:9999px;filter:blur(100px);opacity:.35;z-index:-1;pointer-events:none;animation:float 12s ease-in-out infinite;}
+  .orb-1{width:500px;height:500px;background:#ff6a00;top:-100px;left:-100px;}
+  .orb-2{width:400px;height:400px;background:#ffb347;bottom:-100px;right:-100px;animation-delay:-6s;}
+  @keyframes float{0%,100%{transform:translate(0,0) scale(1);}50%{transform:translate(50px,-50px) scale(1.1);}}
+
+  /* --- Custom cursor --- */
+  .cursor-dot,.cursor-ring{position:fixed;top:0;left:0;pointer-events:none;z-index:9999;border-radius:9999px;transform:translate(-50%,-50%);}
+  .cursor-dot{width:6px;height:6px;background:#ff6a00;transition:transform .1s;}
+  .cursor-ring{width:36px;height:36px;border:1.5px solid rgba(255,106,0,0.6);transition:transform .2s ease, width .2s, height .2s, background .2s;}
+  .cursor-ring.hover{width:60px;height:60px;background:rgba(255,106,0,0.1);border-color:#ff6a00;}
+  @media (max-width:768px){.cursor-dot,.cursor-ring{display:none;} html,body{cursor:auto;}}
+
+  /* --- Glass / cards --- */
+  .glass{background:rgba(18,18,24,0.55);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.08);}
+  .glass-strong{background:rgba(14,14,20,0.85);backdrop-filter:blur(24px);border:1px solid rgba(255,106,0,0.15);}
+  .gradient-border{position:relative;background:linear-gradient(#0b0b11,#0b0b11) padding-box, linear-gradient(135deg,#ff6a00,#ffb347,#ff6a00) border-box;border:1px solid transparent;background-size:100% 100%, 200% 200%;animation:borderShift 6s linear infinite;}
+  @keyframes borderShift{0%{background-position:0 0, 0% 50%;}100%{background-position:0 0, 200% 50%;}}
+
+  .card-hover{transition:all .5s cubic-bezier(.4,0,.2,1);}
+  .card-hover:hover{transform:translateY(-6px);box-shadow:0 30px 60px -20px rgba(255,106,0,.25);}
+
+  /* --- Text gradient --- */
+  .text-gradient{background:linear-gradient(135deg,#ff6a00 0%,#ffb347 50%,#ff6a00 100%);background-size:200% 200%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:gradient 4s ease infinite;}
+  @keyframes gradient{0%,100%{background-position:0% 50%;}50%{background-position:100% 50%;}}
+
+  /* --- Hero image float --- */
+  .float-hero{animation:floatY 6s ease-in-out infinite;}
+  @keyframes floatY{0%,100%{transform:translateY(0);}50%{transform:translateY(-18px);}}
+
+  /* --- Marquee --- */
+  .marquee{overflow:hidden;}
+  .marquee-track{display:flex;gap:4rem;animation:marquee 30s linear infinite;}
+  @keyframes marquee{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+
+  /* --- Reveal underline on nav --- */
+  .nav-link{position:relative;}
+  .nav-link::after{content:'';position:absolute;left:0;bottom:-4px;width:0;height:2px;background:linear-gradient(90deg,#ff6a00,#ffb347);transition:width .3s;}
+  .nav-link:hover::after{width:100%;}
+
+  /* --- Button shine --- */
+  .btn-primary{position:relative;overflow:hidden;background:linear-gradient(135deg,#ff6a00,#ff8c33);transition:transform .3s, box-shadow .3s;}
+  .btn-primary::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.3),transparent);transition:left .6s;}
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 20px 40px -10px rgba(255,106,0,.5);}
+  .btn-primary:hover::before{left:100%;}
+
+  /* --- Progress bar --- */
+  .scroll-progress{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,#ff6a00,#ffb347);z-index:9999;width:0;transition:width .1s;}
+
+  /* --- Section numbering --- */
+  .section-num{font-family:'Space Grotesk',sans-serif;font-size:120px;font-weight:700;background:linear-gradient(180deg,rgba(255,106,0,.15),transparent);-webkit-background-clip:text;background-clip:text;color:transparent;line-height:1;}
+
+  /* --- Driver layer card hover --- */
+  .layer-card{transition:all .4s;border-left:2px solid transparent;}
+  .layer-card:hover{border-left-color:#ff6a00;background:rgba(255,106,0,.08);transform:translateX(8px);}
+  .layer-card:hover .layer-num{background:#ff6a00;color:#fff;}
+  .layer-num{transition:all .4s;}
+
+  /* --- Lightbox --- */
+  .lightbox{position:fixed;inset:0;background:rgba(0,0,0,.95);z-index:100;display:none;align-items:center;justify-content:center;padding:2rem;}
+  .lightbox.active{display:flex;animation:fadeIn .3s;}
+  @keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+  .lightbox img{max-width:90%;max-height:85vh;border-radius:12px;}
+
+  /* --- Mobile menu --- */
+  .mobile-menu{transform:translateX(100%);transition:transform .4s cubic-bezier(.4,0,.2,1);}
+  .mobile-menu.open{transform:translateX(0);}
+
+  /* --- Noise overlay --- */
+  .noise::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:1;opacity:.03;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence baseFrequency='0.9'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");}
+</style>
 </head>
-<body class="antialiased selection:bg-orange-500 selection:text-white overflow-x-hidden">
+<body class="antialiased selection:bg-orange-500 selection:text-white overflow-x-hidden noise">
 
-  <!-- Sticky Navigation -->
-  <nav class="fixed top-0 w-full z-50 glass">
-    <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-      <div class="flex items-center gap-2">
-        <span class="text-xs font-bold tracking-[0.25em] text-zinc-400 uppercase">CROSSBEATS</span>
-        <span class="text-xl font-black tracking-tight text-white">MUSE <span class="text-orange-500 text-xs font-bold align-top">OWS</span></span>
+<!-- Custom cursor -->
+<div class="cursor-ring"></div>
+<div class="cursor-dot"></div>
+
+<!-- Scroll progress -->
+<div class="scroll-progress" id="progress"></div>
+
+<!-- Animated background -->
+<div class="grid-bg"></div>
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+
+<!-- ============== NAV ============== -->
+<nav class="fixed top-0 w-full z-50 glass-strong">
+  <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+    <a href="#" class="flex items-center gap-2">
+      <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-orange-500 to-amber-500 flex items-center justify-center font-black text-white">M</div>
+      <div class="leading-tight">
+        <div class="text-[10px] font-bold tracking-[0.25em] text-zinc-500 uppercase">Crossbeats</div>
+        <div class="text-base font-black text-white">MUSE <span class="text-orange-500 text-[10px] align-top">OWS</span></div>
       </div>
-      <div class="hidden md:flex space-x-8 text-sm font-medium text-zinc-400">
-        <a href="#acoustics" class="hover:text-orange-400 transition">5-Layer Driver</a>
-        <a href="#performance" class="hover:text-orange-400 transition">BT 6.0 & 40H Battery</a>
-        <a href="#fit" class="hover:text-orange-400 transition">Fit & Guide</a>
-        <a href="#gallery" class="hover:text-orange-400 transition">Gallery</a>
-      </div>
-      <a href="#buy" class="bg-gradient-to-r from-orange-600 to-amber-500 hover:from-orange-500 hover:to-amber-400 text-white text-sm font-bold px-6 py-2.5 rounded-full shadow-lg shadow-orange-600/25 transition">
-        Pre-Order Now
-      </a>
+    </a>
+    <div class="hidden lg:flex space-x-10 text-sm font-medium text-zinc-300">
+      <a href="#acoustics" class="nav-link">Acoustics</a>
+      <a href="#performance" class="nav-link">Performance</a>
+      <a href="#fit" class="nav-link">Fit Guide</a>
+      <a href="#gallery" class="nav-link">Gallery</a>
     </div>
+    <div class="flex items-center gap-3">
+      <a href="#buy" class="hidden md:inline-block btn-primary text-white text-sm font-bold px-6 py-2.5 rounded-full">Pre-Order</a>
+      <button id="menuBtn" class="lg:hidden text-white text-2xl">☰</button>
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile menu -->
+<div id="mobileMenu" class="mobile-menu fixed top-0 right-0 h-full w-72 glass-strong z-50 p-8 pt-24 lg:hidden">
+  <button id="closeBtn" class="absolute top-6 right-6 text-2xl text-white">✕</button>
+  <nav class="flex flex-col gap-6 text-lg font-semibold">
+    <a href="#acoustics" class="menu-link">Acoustics</a>
+    <a href="#performance" class="menu-link">Performance</a>
+    <a href="#fit" class="menu-link">Fit Guide</a>
+    <a href="#gallery" class="menu-link">Gallery</a>
+    <a href="#buy" class="menu-link btn-primary text-center text-white px-6 py-3 rounded-full mt-4">Pre-Order</a>
   </nav>
+</div>
 
-  <!-- 1. HERO SECTION (Maps to: hero.png) -->
-  <section class="relative pt-32 pb-20 md:pt-40 md:pb-28 px-6 max-w-7xl mx-auto">
-    <div class="orange-glow absolute inset-0 -z-10"></div>
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-      
-      <div class="lg:col-span-6 space-y-6 text-center lg:text-left">
-        <div class="inline-flex items-center gap-2 py-1.5 px-4 rounded-full bg-orange-500/10 border border-orange-500/30 text-orange-400 text-xs font-bold uppercase tracking-widest">
-          <span class="w-2 h-2 rounded-full bg-orange-500 animate-pulse"></span>
-          Open Wearable Stereo Earbuds
-        </div>
-        <h1 class="text-4xl sm:text-6xl font-black tracking-tight leading-[1.1]">
-          Open-Ear Comfort.<br>
-          <span class="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 via-amber-400 to-orange-300">
-            Zero Compromise.
-          </span>
-        </h1>
-        <p class="text-zinc-400 text-lg max-w-xl mx-auto lg:mx-0 leading-relaxed">
-          Experience <strong class="text-white">Crossbeats Muse</strong> with signature orange ergonomic ear-hooks, <strong class="text-orange-400">Clear Calls with Crisp Voice Pickup</strong>, next-gen <strong class="text-orange-400">Bluetooth 6.0</strong>, and a massive <strong class="text-orange-400">40-Hour Total Playtime</strong>.
-        </p>
-        <div class="pt-2 flex flex-wrap gap-4 justify-center lg:justify-start">
-          <a href="#acoustics" class="bg-orange-600 hover:bg-orange-500 text-white font-bold px-8 py-3.5 rounded-full shadow-xl shadow-orange-600/20 transition">
-            Inside the Driver
-          </a>
-          <a href="#fit" class="glass hover:bg-zinc-800/80 text-white font-semibold px-8 py-3.5 rounded-full transition">
-            3-Step Wear Guide
-          </a>
-        </div>
+<!-- ============== HERO ============== -->
+<section class="relative min-h-screen flex items-center pt-28 pb-16 px-6 overflow-hidden">
+  <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center w-full">
 
-        <div class="pt-6 grid grid-cols-3 gap-4 border-t border-zinc-800/80 max-w-lg mx-auto lg:mx-0">
-          <div>
-            <p class="text-2xl font-black text-orange-400">BT 6.0</p>
-            <p class="text-xs text-zinc-400">Reduced Audio Lag</p>
-          </div>
-          <div>
-            <p class="text-2xl font-black text-orange-400">40H</p>
-            <p class="text-xs text-zinc-400">Snap Charge Case</p>
-          </div>
-          <div>
-            <p class="text-2xl font-black text-orange-400">Clear Calls</p>
-            <p class="text-xs text-zinc-400">Crisp Voice Pickup</p>
-          </div>
-        </div>
+    <div class="lg:col-span-6 space-y-7" data-aos="fade-right">
+      <div class="inline-flex items-center gap-2 py-2 px-4 rounded-full glass text-orange-400 text-xs font-bold uppercase tracking-widest">
+        <span class="relative flex h-2 w-2">
+          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
+          <span class="relative inline-flex rounded-full h-2 w-2 bg-orange-500"></span>
+        </span>
+        Open Wearable Stereo
       </div>
 
-      <div class="lg:col-span-6">
-        <div class="glass p-3 rounded-3xl shadow-2xl">
-          <img src="hero.png" data-fallback="hero.PNG" alt="Crossbeats Muse Hero - Clear Calls & Crisp Voice Pickup" class="smart-img w-full rounded-2xl object-cover">
-        </div>
-      </div>
+      <h1 class="font-display text-5xl sm:text-7xl font-black leading-[0.95]">
+        Open Ear.<br>
+        <span class="text-gradient">Infinite Sound.</span>
+      </h1>
 
-    </div>
-  </section>
+      <p class="text-zinc-400 text-lg max-w-xl leading-relaxed">
+        Meet <strong class="text-white">Crossbeats Muse</strong> — featherlight open-ear earbuds engineered with <strong class="text-orange-400">Bluetooth 6.0</strong>, a <strong class="text-orange-400">5-layer acoustic driver</strong>, and <strong class="text-orange-400">40-hour</strong> playtime that keeps up with every beat of your day.
+      </p>
 
-  <!-- 2. EXPLODED ACOUSTIC ARCHITECTURE (Maps to: driver.png) -->
-  <section id="acoustics" class="py-20 px-6 max-w-7xl mx-auto">
-    <div class="text-center max-w-2xl mx-auto mb-14">
-      <span class="text-orange-500 text-xs font-bold uppercase tracking-widest">Internal Hardware Breakdown</span>
-      <h2 class="text-3xl md:text-5xl font-black mt-2">5-Stage Acoustic Architecture</h2>
-      <p class="text-zinc-400 mt-3 text-sm md:text-base">Custom-engineered internal stack delivering deep bass resonance and directional open-ear clarity.</p>
-    </div>
-
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center glass p-6 md:p-10 rounded-3xl card-hover">
-      <div class="lg:col-span-7">
-        <img src="driver.png" data-fallback="driver.PNG" alt="Crossbeats Muse Driver Architecture" class="smart-img w-full rounded-2xl object-cover border border-zinc-800">
-      </div>
-      <div class="lg:col-span-5 space-y-3.5">
-        <div class="p-4 rounded-2xl bg-zinc-900/90 border border-zinc-800">
-          <h4 class="font-bold text-orange-400 text-sm">1. Acoustic Dome</h4>
-          <p class="text-xs text-zinc-400 mt-1">Precision-moulded upper grille channels directional sound waves straight into your ear canal.</p>
-        </div>
-        <div class="p-4 rounded-2xl bg-zinc-900/90 border border-zinc-800">
-          <h4 class="font-bold text-orange-400 text-sm">2. High-Sensitivity Diaphragm</h4>
-          <p class="text-xs text-zinc-400 mt-1">Ultra-responsive composite membrane produces crisp trebles and rich midrange detail.</p>
-        </div>
-        <div class="p-4 rounded-2xl bg-zinc-900/90 border border-zinc-800">
-          <h4 class="font-bold text-orange-400 text-sm">3. Voice Coil</h4>
-          <p class="text-xs text-zinc-400 mt-1">Lightweight copper-clad voice coil ensures rapid transient response with zero distortion.</p>
-        </div>
-        <div class="p-4 rounded-2xl bg-zinc-900/90 border border-zinc-800">
-          <h4 class="font-bold text-orange-400 text-sm">4. Magnet Assembly</h4>
-          <p class="text-xs text-zinc-400 mt-1">High-flux neodymium magnetic ring drives powerful low-frequency bass punch.</p>
-        </div>
-        <div class="p-4 rounded-2xl bg-zinc-900/90 border border-zinc-800">
-          <h4 class="font-bold text-orange-400 text-sm">5. Resonance Chamber</h4>
-          <p class="text-xs text-zinc-400 mt-1">Sealed acoustic rear cavity balances air pressure for warm, full-bodied open-ear sound.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 3. BENTO GRID: BLUETOOTH 6.0, 40H BATTERY & PREMIUM CASE -->
-  <section id="performance" class="py-16 px-6 max-w-7xl mx-auto">
-    <div class="text-center max-w-2xl mx-auto mb-14">
-      <span class="text-orange-500 text-xs font-bold uppercase tracking-widest">Next-Gen Specs</span>
-      <h2 class="text-3xl md:text-5xl font-black mt-2">Power, Speed & Craftsmanship</h2>
-    </div>
-
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-      
-      <!-- Bluetooth 6.0 Card (Maps to: "bluetooth .png" OR "bluetooth.png") -->
-      <div class="glass p-6 md:p-8 rounded-3xl card-hover flex flex-col justify-between">
-        <div>
-          <span class="text-xs font-bold text-orange-400 uppercase tracking-wider">Flagship Silicon</span>
-          <h3 class="text-2xl font-extrabold mt-1 mb-2">Bluetooth® 6.0 Chipset</h3>
-          <p class="text-zinc-400 text-sm mb-6">Engineered for smarter power use, rock-solid wireless connection stability, and ultra-reduced audio lag for seamless video and gaming sync.</p>
-        </div>
-        <img src="bluetooth%20.png" data-fallback="bluetooth.png" alt="Bluetooth 6.0 Chipset" class="smart-img w-full rounded-2xl object-cover border border-zinc-800">
-      </div>
-
-      <!-- 40H Battery Card (Maps to: "battery and performance.png" OR "battery.png") -->
-      <div class="glass p-6 md:p-8 rounded-3xl card-hover flex flex-col justify-between">
-        <div>
-          <span class="text-xs font-bold text-green-400 uppercase tracking-wider">Power That Lasts</span>
-          <h3 class="text-2xl font-extrabold mt-1 mb-2">40H Total Playtime + Snap Charge</h3>
-          <p class="text-zinc-400 text-sm mb-6">Go days without reaching for a charger. Paired with rapid Type-C Snap Charge and reliable all-day battery endurance.</p>
-        </div>
-        <img src="battery%20and%20performance.png" data-fallback="battery.png,Battery%20and%20performance.png" alt="40H Total Playtime with Case" class="smart-img w-full rounded-2xl object-cover border border-zinc-800">
-      </div>
-
-      <!-- Premium Case Card (Maps to: "premium case.png" OR "premium-case.png") -->
-      <div class="md:col-span-2 glass p-6 md:p-10 rounded-3xl card-hover grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-        <div class="lg:col-span-5 space-y-4">
-          <span class="text-xs font-bold text-orange-400 uppercase tracking-wider">Built to Stay Pristine</span>
-          <h3 class="text-2xl md:text-3xl font-extrabold">Premium Case with Dual-Resistant Finish</h3>
-          <p class="text-zinc-400 text-sm leading-relaxed">
-            Finished with a refined matte texture that repels daily wear, keeping your Crossbeats Muse charging case looking fresh out of the box.
-          </p>
-          <ul class="space-y-2.5 text-sm text-zinc-200 pt-2">
-            <li class="flex items-center gap-2.5"><span class="text-orange-500 font-bold">✔</span> <strong>Fingerprint-Resistant Finish:</strong> Zero oil smudges or marks</li>
-            <li class="flex items-center gap-2.5"><span class="text-orange-500 font-bold">✔</span> <strong>Scratch-Resistant Finish:</strong> Durable against keys and pocket wear</li>
-            <li class="flex items-center gap-2.5"><span class="text-orange-500 font-bold">✔</span> <strong>Compact Cobble Ergonomics:</strong> Effortless one-hand flip opening</li>
-          </ul>
-        </div>
-        <div class="lg:col-span-7">
-          <img src="premium%20case.png" data-fallback="premium-case.png" alt="Crossbeats Muse Fingerprint and Scratch Resistant Case" class="smart-img w-full rounded-2xl object-cover border border-zinc-800">
-        </div>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- 4. SECURE FIT & HOW TO WEAR (Maps to: "secure fit.png" & "how to wear.png") -->
-  <section id="fit" class="py-20 px-6 max-w-7xl mx-auto">
-    <div class="text-center max-w-2xl mx-auto mb-14">
-      <span class="text-orange-500 text-xs font-bold uppercase tracking-widest">Ergonomic Open-Ear Hook</span>
-      <h2 class="text-3xl md:text-5xl font-black mt-2">Locks in Place. Zero Ear Fatigue.</h2>
-    </div>
-
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-      <div class="glass p-6 md:p-8 rounded-3xl card-hover flex flex-col justify-between">
-        <div>
-          <span class="text-xs font-bold text-orange-400 uppercase tracking-wider">Active Sports Ready</span>
-          <h3 class="text-2xl font-bold mt-1 mb-2">Locks In Place During Intense Movement</h3>
-          <p class="text-zinc-400 text-sm mb-6">Tested for court sports, workouts, and outdoor sprints. The flexible memory hook hugs your ear contour so it never slips out mid-game.</p>
-        </div>
-        <img src="secure%20fit.png" data-fallback="secure-fit.png" alt="Locks in Place Secure Fit" class="smart-img w-full rounded-2xl object-cover border border-zinc-800">
-      </div>
-
-      <div class="glass p-6 md:p-8 rounded-3xl card-hover flex flex-col justify-between">
-        <div>
-          <span class="text-xs font-bold text-orange-400 uppercase tracking-wider">Quick Fit Guide</span>
-          <h3 class="text-2xl font-bold mt-1 mb-2">How to Wear in 3 Simple Steps</h3>
-          <p class="text-zinc-400 text-sm mb-6">
-            <strong>1. Position:</strong> Place the speaker over your ear → 
-            <strong>2. Hook:</strong> Gently guide the orange hook around the ear rim → 
-            <strong>3. Adjust:</strong> Centre the earbud until it feels secure and comfortable.
-          </p>
-        </div>
-        <img src="how%20to%20wear.png" data-fallback="how-to-wear.png" alt="How to Wear Crossbeats Muse" class="smart-img w-full rounded-2xl object-cover border border-zinc-800">
-      </div>
-    </div>
-  </section>
-
-  <!-- 5. INTERACTIVE GALLERY -->
-  <section id="gallery" class="py-16 px-6 max-w-5xl mx-auto">
-    <h2 class="text-3xl font-black text-center mb-8">Complete Visual Gallery</h2>
-    <div class="glass p-6 rounded-3xl">
-      <div class="mb-6 flex justify-center bg-black/60 rounded-2xl p-4 border border-zinc-800">
-        <img id="main-preview" src="premium%20case.png" data-fallback="premium-case.png" alt="Gallery Preview" class="smart-img max-h-[460px] rounded-xl object-contain transition-all duration-300">
-      </div>
-      <div class="grid grid-cols-4 sm:grid-cols-7 gap-3">
-        <img onclick="swapImg(this.src)" src="hero.png" class="smart-img h-16 w-full object-cover rounded-lg cursor-pointer border border-zinc-700 hover:border-orange-500 transition" alt="Hero">
-        <img onclick="swapImg(this.src)" src="premium%20case.png" data-fallback="premium-case.png" class="smart-img h-16 w-full object-cover rounded-lg cursor-pointer border-2 border-orange-500 transition" alt="Case">
-        <img onclick="swapImg(this.src)" src="driver.png" class="smart-img h-16 w-full object-cover rounded-lg cursor-pointer border border-zinc-700 hover:border-orange-500 transition" alt="Driver">
-        <img onclick="swapImg(this.src)" src="bluetooth%20.png" data-fallback="bluetooth.png" class="smart-img h-16 w-full object-cover rounded-lg cursor-pointer border border-zinc-700 hover:border-orange-500 transition" alt="Bluetooth 6.0">
-        <img onclick="swapImg(this.src)" src="battery%20and%20performance.png" data-fallback="battery.png,Battery%20and%20performance.png" class="smart-img h-16 w-full object-cover rounded-lg cursor-pointer border border-zinc-700 hover:border-orange-500 transition" alt="Battery">
-        <img onclick="swapImg(this.src)" src="secure%20fit.png" data-fallback="secure-fit.png" class="smart-img h-16 w-full object-cover rounded-lg cursor-pointer border border-zinc-700 hover:border-orange-500 transition" alt="Secure Fit">
-        <img onclick="swapImg(this.src)" src="how%20to%20wear.png" data-fallback="how-to-wear.png" class="smart-img h-16 w-full object-cover rounded-lg cursor-pointer border border-zinc-700 hover:border-orange-500 transition" alt="How to Wear">
-      </div>
-    </div>
-  </section>
-
-  <!-- CTA Footer -->
-  <footer id="buy" class="py-20 px-6 border-t border-zinc-900 text-center">
-    <div class="max-w-2xl mx-auto space-y-6">
-      <span class="text-orange-500 text-xs font-bold uppercase tracking-widest">Crossbeats Official Launch</span>
-      <h2 class="text-4xl font-black">Crossbeats MUSE OWS</h2>
-      <p class="text-zinc-400 text-sm">Available in Carbon Black &amp; Frost White with Signature Orange Ergonomic Hook.</p>
-      <div class="pt-2">
-        <a href="https://crossbeats.com" target="_blank" class="inline-block bg-gradient-to-r from-orange-600 to-amber-500 hover:from-orange-500 hover:to-amber-400 text-white font-bold px-10 py-4 rounded-full shadow-2xl shadow-orange-600/30 transition">
-          Shop Crossbeats Muse
+      <div class="flex flex-wrap gap-4">
+        <a href="#acoustics" class="btn-primary text-white font-bold px-8 py-4 rounded-full inline-flex items-center gap-2">
+          Explore Technology <span>→</span>
         </a>
+        <a href="#fit" class="glass hover:bg-white/5 text-white font-semibold px-8 py-4 rounded-full transition">How to Wear</a>
       </div>
-      <p class="text-xs text-zinc-600 pt-8">© 2026 Crossbeats. All Rights Reserved.</p>
+
+      <div class="pt-6 grid grid-cols-3 gap-4 border-t border-white/10 max-w-lg">
+        <div><p class="font-display text-3xl font-bold text-gradient" data-count="6.0">0</p><p class="text-xs text-zinc-500 uppercase tracking-wider mt-1">Bluetooth</p></div>
+        <div><p class="font-display text-3xl font-bold text-gradient" data-count="40">0</p><p class="text-xs text-zinc-500 uppercase tracking-wider mt-1">Hour Battery</p></div>
+        <div><p class="font-display text-3xl font-bold text-gradient" data-count="5">0</p><p class="text-xs text-zinc-500 uppercase tracking-wider mt-1">Layer Driver</p></div>
+      </div>
     </div>
-  </footer>
 
-  <!-- Smart Image Loader: Automatically tries fallback filenames if spaces/hyphens differ -->
-  <script>
-    function swapImg(src) {
-      document.getElementById('main-preview').src = src;
-    }
+    <div class="lg:col-span-6 relative" data-aos="fade-left" data-aos-delay="200">
+      <div class="absolute inset-0 bg-gradient-to-r from-orange-500/20 to-amber-500/20 blur-3xl rounded-full"></div>
+      <div class="relative gradient-border rounded-[32px] p-3 float-hero">
+        <img src="hero.png" data-fallback="hero.PNG" alt="Crossbeats Muse OWS" class="smart-img w-full rounded-3xl">
+      </div>
+    </div>
 
-    document.querySelectorAll('.smart-img').forEach(img => {
-      img.addEventListener('error', function() {
-        const fallbacks = (this.getAttribute('data-fallback') || '').split(',').filter(Boolean);
-        if (fallbacks.length > 0) {
-          const nextSrc = fallbacks.shift();
-          this.setAttribute('data-fallback', fallbacks.join(','));
-          this.src = nextSrc;
-        }
-      });
+  </div>
+</section>
+
+<!-- ============== MARQUEE ============== -->
+<div class="marquee py-6 border-y border-white/10 glass">
+  <div class="marquee-track whitespace-nowrap text-2xl font-display font-bold text-zinc-500">
+    <span>OPEN EAR DESIGN</span><span class="text-orange-500">●</span>
+    <span>BLUETOOTH 6.0</span><span class="text-orange-500">●</span>
+    <span>40 HOUR BATTERY</span><span class="text-orange-500">●</span>
+    <span>CRYSTAL CLEAR CALLS</span><span class="text-orange-500">●</span>
+    <span>5-LAYER DRIVER</span><span class="text-orange-500">●</span>
+    <span>IP RATED SWEAT PROOF</span><span class="text-orange-500">●</span>
+    <!-- duplicate for seamless loop -->
+    <span>OPEN EAR DESIGN</span><span class="text-orange-500">●</span>
+    <span>BLUETOOTH 6.0</span><span class="text-orange-500">●</span>
+    <span>40 HOUR BATTERY</span><span class="text-orange-500">●</span>
+    <span>CRYSTAL CLEAR CALLS</span><span class="text-orange-500">●</span>
+    <span>5-LAYER DRIVER</span><span class="text-orange-500">●</span>
+    <span>IP RATED SWEAT PROOF</span><span class="text-orange-500">●</span>
+  </div>
+</div>
+
+<!-- ============== ACOUSTICS ============== -->
+<section id="acoustics" class="relative py-28 px-6 max-w-7xl mx-auto">
+  <div class="absolute right-0 top-10 section-num hidden md:block">01</div>
+
+  <div class="max-w-2xl mb-16" data-aos="fade-up">
+    <span class="text-orange-500 text-xs font-bold uppercase tracking-widest">Internal Architecture</span>
+    <h2 class="font-display text-4xl md:text-6xl font-black mt-3">5-Stage <span class="text-gradient">Acoustic Stack</span></h2>
+    <p class="text-zinc-400 mt-4 text-lg">Custom-engineered multi-layer driver delivering studio-grade clarity, deep bass resonance, and open-ear directional precision.</p>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+    <div class="lg:col-span-7" data-aos="zoom-in">
+      <div class="gradient-border rounded-3xl p-2">
+        <img src="driver.png" alt="Driver Architecture" class="smart-img w-full rounded-2xl">
+      </div>
+    </div>
+    <div class="lg:col-span-5 space-y-3" data-aos="fade-left">
+      <div class="layer-card p-5 rounded-2xl glass flex items-start gap-4">
+        <div class="layer-num w-10 h-10 rounded-full bg-white/5 flex items-center justify-center font-bold text-orange-400 shrink-0">01</div>
+        <div><h4 class="font-bold text-white">Acoustic Dome</h4><p class="text-sm text-zinc-400 mt-1">Precision-moulded grille channels sound directly into the ear canal.</p></div>
+      </div>
+      <div class="layer-card p-5 rounded-2xl glass flex items-start gap-4">
+        <div class="layer-num w-10 h-10 rounded-full bg-white/5 flex items-center justify-center font-bold text-orange-400 shrink-0">02</div>
+        <div><h4 class="font-bold text-white">Sensitivity Diaphragm</h4><p class="text-sm text-zinc-400 mt-1">Composite membrane delivers crisp trebles with rich midrange.</p></div>
+      </div>
+      <div class="layer-card p-5 rounded-2xl glass flex items-start gap-4">
+        <div class="layer-num w-10 h-10 rounded-full bg-white/5 flex items-center justify-center font-bold text-orange-400 shrink-0">03</div>
+        <div><h4 class="font-bold text-white">Voice Coil</h4><p class="text-sm text-zinc-400 mt-1">Copper-clad lightweight coil for zero distortion transients.</p></div>
+      </div>
+      <div class="layer-card p-5 rounded-2xl glass flex items-start gap-4">
+        <div class="layer-num w-10 h-10 rounded-full bg-white/5 flex items-center justify-center font-bold text-orange-400 shrink-0">04</div>
+        <div><h4 class="font-bold text-white">Neodymium Magnet</h4><p class="text-sm text-zinc-400 mt-1">High-flux magnetic ring producing powerful low-frequency punch.</p></div>
+      </div>
+      <div class="layer-card p-5 rounded-2xl glass flex items-start gap-4">
+        <div class="layer-num w-10 h-10 rounded-full bg-white/5 flex items-center justify-center font-bold text-orange-400 shrink-0">05</div>
+        <div><h4 class="font-bold text-white">Resonance Chamber</h4><p class="text-sm text-zinc-400 mt-1">Sealed cavity balances pressure for warm, full-bodied sound.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============== PERFORMANCE BENTO ============== -->
+<section id="performance" class="relative py-28 px-6 max-w-7xl mx-auto">
+  <div class="absolute left-0 top-10 section-num hidden md:block">02</div>
+
+  <div class="max-w-2xl mb-16" data-aos="fade-up">
+    <span class="text-orange-500 text-xs font-bold uppercase tracking-widest">Performance Specs</span>
+    <h2 class="font-display text-4xl md:text-6xl font-black mt-3">Built for <span class="text-gradient">Every Beat.</span></h2>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-6 gap-6">
+
+    <div class="md:col-span-3 glass rounded-3xl p-8 card-hover" data-aos="fade-up">
+      <span class="text-xs font-bold text-orange-400 uppercase tracking-wider">Flagship Silicon</span>
+      <h3 class="font-display text-3xl font-black mt-2 mb-3">Bluetooth 6.0</h3>
+      <p class="text-zinc-400 text-sm mb-6">Smarter power use, stable connection, ultra-low audio lag for gaming and video.</p>
+      <img src="bluetooth.png" data-fallback="bluetooth%20.png,bluetooth .png" alt="BT 6.0" class="smart-img w-full rounded-2xl">
+    </div>
+
+    <div class="md:col-span-3 glass rounded-3xl p-8 card-hover" data-aos="fade-up" data-aos-delay="100">
+      <span class="text-xs font-bold text-green-400 uppercase tracking-wider">Power That Lasts</span>
+      <h3 class="font-display text-3xl font-black mt-2 mb-3">40H Playtime</h3>
+      <p class="text-zinc-400 text-sm mb-6">Days without charging. Type-C snap charge for quick top-ups on the go.</p>
+      <img src="battery.png" data-fallback="battery%20and%20performance%20.png,battery and performance .png,battery%20and%20performance.png,battery and performance.png,Battery.png" alt="40H Battery" class="smart-img w-full rounded-2xl">
+    </div>
+
+    <div class="md:col-span-6 glass rounded-3xl p-8 md:p-12 card-hover grid grid-cols-1 lg:grid-cols-2 gap-8 items-center" data-aos="fade-up">
+      <div class="space-y-5">
+        <span class="text-xs font-bold text-orange-400 uppercase tracking-wider">Pristine Craftsmanship</span>
+        <h3 class="font-display text-3xl md:text-4xl font-black">Dual-Resistant Premium Case</h3>
+        <p class="text-zinc-400">Refined matte finish repels daily wear — keeping your charging case looking fresh out of the box.</p>
+        <ul class="space-y-3 pt-2">
+          <li class="flex items-center gap-3"><span class="w-6 h-6 rounded-full bg-orange-500/20 flex items-center justify-center text-orange-400 text-xs">✓</span><span><strong>Fingerprint Resistant</strong> — no oil smudges</span></li>
+          <li class="flex items-center gap-3"><span class="w-6 h-6 rounded-full bg-orange-500/20 flex items-center justify-center text-orange-400 text-xs">✓</span><span><strong>Scratch Resistant</strong> — pocket-ready durability</span></li>
+          <li class="flex items-center gap-3"><span class="w-6 h-6 rounded-full bg-orange-500/20 flex items-center justify-center text-orange-400 text-xs">✓</span><span><strong>Cobble Ergonomics</strong> — one-hand flip</span></li>
+        </ul>
+      </div>
+      <div><img src="premium-case.png" data-fallback="premium%20case.png,premium case.png" alt="Premium Case" class="smart-img w-full rounded-2xl"></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============== FIT ============== -->
+<section id="fit" class="relative py-28 px-6 max-w-7xl mx-auto">
+  <div class="absolute right-0 top-10 section-num hidden md:block">03</div>
+
+  <div class="max-w-2xl mb-16" data-aos="fade-up">
+    <span class="text-orange-500 text-xs font-bold uppercase tracking-widest">Ergonomic Hook</span>
+    <h2 class="font-display text-4xl md:text-6xl font-black mt-3">Locks In. <span class="text-gradient">Never Falls.</span></h2>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+    <div class="glass rounded-3xl p-8 card-hover" data-aos="fade-right">
+      <span class="text-xs font-bold text-orange-400 uppercase tracking-wider">Sports Ready</span>
+      <h3 class="font-display text-2xl font-bold mt-2 mb-3">Secure Through Every Move</h3>
+      <p class="text-zinc-400 text-sm mb-6">Tested for workouts, court sports and outdoor sprints — the flexible memory hook contours your ear.</p>
+      <img src="secure-fit.png" data-fallback="secure%20fit.png,secure fit.png" alt="Secure Fit" class="smart-img w-full rounded-2xl">
+    </div>
+
+    <div class="glass rounded-3xl p-8 card-hover" data-aos="fade-left">
+      <span class="text-xs font-bold text-orange-400 uppercase tracking-wider">Quick Guide</span>
+      <h3 class="font-display text-2xl font-bold mt-2 mb-3">Wear in 3 Simple Steps</h3>
+      <div class="space-y-2 mb-6 text-sm">
+        <p class="flex gap-3"><span class="font-bold text-orange-400">01</span> Place speaker over your ear</p>
+        <p class="flex gap-3"><span class="font-bold text-orange-400">02</span> Guide the orange hook around ear rim</p>
+        <p class="flex gap-3"><span class="font-bold text-orange-400">03</span> Centre until it feels secure</p>
+      </div>
+      <img src="how-to-wear.png" data-fallback="how%20to%20wear.png,how to wear.png" alt="How to Wear" class="smart-img w-full rounded-2xl">
+    </div>
+  </div>
+</section>
+
+<!-- ============== GALLERY ============== -->
+<section id="gallery" class="relative py-28 px-6 max-w-6xl mx-auto">
+  <div class="absolute left-0 top-10 section-num hidden md:block">04</div>
+
+  <div class="text-center mb-14" data-aos="fade-up">
+    <span class="text-orange-500 text-xs font-bold uppercase tracking-widest">Visual Showcase</span>
+    <h2 class="font-display text-4xl md:text-6xl font-black mt-3">Every Angle. <span class="text-gradient">Perfected.</span></h2>
+  </div>
+
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-4" data-aos="fade-up">
+    <div class="gallery-item relative overflow-hidden rounded-2xl aspect-square cursor-pointer group">
+      <img src="hero.png" class="smart-img w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Hero">
+      <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-4 opacity-0 group-hover:opacity-100 transition"><span class="text-white font-semibold">Hero Shot</span></div>
+    </div>
+    <div class="gallery-item relative overflow-hidden rounded-2xl aspect-square cursor-pointer group">
+      <img src="premium-case.png" data-fallback="premium%20case.png,premium case.png" class="smart-img w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Case">
+      <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-4 opacity-0 group-hover:opacity-100 transition"><span class="text-white font-semibold">Premium Case</span></div>
+    </div>
+    <div class="gallery-item relative overflow-hidden rounded-2xl aspect-square cursor-pointer group">
+      <img src="driver.png" class="smart-img w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Driver">
+      <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-4 opacity-0 group-hover:opacity-100 transition"><span class="text-white font-semibold">5-Layer Driver</span></div>
+    </div>
+    <div class="gallery-item relative overflow-hidden rounded-2xl aspect-square cursor-pointer group">
+      <img src="bluetooth.png" data-fallback="bluetooth%20.png,bluetooth .png" class="smart-img w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="BT">
+      <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-4 opacity-0 group-hover:opacity-100 transition"><span class="text-white font-semibold">Bluetooth 6.0</span></div>
+    </div>
+    <div class="gallery-item relative overflow-hidden rounded-2xl aspect-square cursor-pointer group">
+      <img src="battery.png" data-fallback="battery%20and%20performance%20.png,battery and performance .png,battery%20and%20performance.png" class="smart-img w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Battery">
+      <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-4 opacity-0 group-hover:opacity-100 transition"><span class="text-white font-semibold">40H Battery</span></div>
+    </div>
+    <div class="gallery-item relative overflow-hidden rounded-2xl aspect-square cursor-pointer group">
+      <img src="secure-fit.png" data-fallback="secure%20fit.png,secure fit.png" class="smart-img w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Fit">
+      <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-4 opacity-0 group-hover:opacity-100 transition"><span class="text-white font-semibold">Secure Fit</span></div>
+    </div>
+    <div class="gallery-item relative overflow-hidden rounded-2xl aspect-square cursor-pointer group">
+      <img src="how-to-wear.png" data-fallback="how%20to%20wear.png,how to wear.png" class="smart-img w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Wear">
+      <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-4 opacity-0 group-hover:opacity-100 transition"><span class="text-white font-semibold">How to Wear</span></div>
+    </div>
+    <div class="gallery-item relative overflow-hidden rounded-2xl aspect-square cursor-pointer group gradient-border flex items-center justify-center text-center p-6">
+      <div><p class="text-gradient font-display font-black text-2xl">MUSE</p><p class="text-xs text-zinc-500 uppercase tracking-widest mt-2">By Crossbeats</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox"><img id="lightboxImg" src=""><button class="absolute top-6 right-6 text-white text-3xl" onclick="closeLightbox()">✕</button></div>
+
+<!-- ============== CTA ============== -->
+<section id="buy" class="relative py-28 px-6">
+  <div class="max-w-4xl mx-auto text-center space-y-8 glass-strong rounded-[40px] p-12 md:p-20" data-aos="zoom-in">
+    <span class="text-orange-500 text-xs font-bold uppercase tracking-widest">Launching Soon</span>
+    <h2 class="font-display text-4xl md:text-7xl font-black">Ready to go <span class="text-gradient">Open?</span></h2>
+    <p class="text-zinc-400 text-lg max-w-xl mx-auto">Available in Carbon Black & Frost White with signature orange ergonomic hook.</p>
+    <div class="flex flex-wrap gap-4 justify-center pt-4">
+      <a href="https://crossbeats.com" target="_blank" class="btn-primary text-white font-bold px-10 py-4 rounded-full">Shop Crossbeats Muse</a>
+      <a href="#" class="glass hover:bg-white/5 text-white font-semibold px-10 py-4 rounded-full transition">Notify Me</a>
+    </div>
+  </div>
+</section>
+
+<footer class="py-10 px-6 border-t border-white/10 text-center text-xs text-zinc-600">
+  © 2026 Crossbeats. All Rights Reserved. · Designed with precision.
+</footer>
+
+<!-- Scripts -->
+<script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+<script>
+  AOS.init({ duration:900, easing:'ease-out-cubic', once:true, offset:80 });
+
+  // Custom cursor
+  const dot = document.querySelector('.cursor-dot');
+  const ring = document.querySelector('.cursor-ring');
+  document.addEventListener('mousemove', e=>{
+    dot.style.left = e.clientX+'px'; dot.style.top = e.clientY+'px';
+    ring.style.left = e.clientX+'px'; ring.style.top = e.clientY+'px';
+  });
+  document.querySelectorAll('a,button,.gallery-item,.layer-card').forEach(el=>{
+    el.addEventListener('mouseenter',()=>ring.classList.add('hover'));
+    el.addEventListener('mouseleave',()=>ring.classList.remove('hover'));
+  });
+
+  // Scroll progress
+  window.addEventListener('scroll',()=>{
+    const h = document.documentElement;
+    const p = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+    document.getElementById('progress').style.width = p+'%';
+  });
+
+  // Mobile menu
+  const menu = document.getElementById('mobileMenu');
+  document.getElementById('menuBtn').onclick = ()=>menu.classList.add('open');
+  document.getElementById('closeBtn').onclick = ()=>menu.classList.remove('open');
+  document.querySelectorAll('.menu-link').forEach(l=>l.onclick=()=>menu.classList.remove('open'));
+
+  // Counter animation
+  const counters = document.querySelectorAll('[data-count]');
+  const animCount = (el)=>{
+    const target = parseFloat(el.dataset.count);
+    const isFloat = target % 1 !== 0;
+    let cur = 0;
+    const step = target / 50;
+    const t = setInterval(()=>{
+      cur += step;
+      if(cur >= target){ cur = target; clearInterval(t); }
+      el.textContent = isFloat ? cur.toFixed(1) : Math.floor(cur);
+    }, 30);
+  };
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ animCount(e.target); io.unobserve(e.target); }});
+  });
+  counters.forEach(c=>io.observe(c));
+
+  // Lightbox
+  document.querySelectorAll('.gallery-item img').forEach(img=>{
+    img.addEventListener('click',()=>{
+      document.getElementById('lightboxImg').src = img.src;
+      document.getElementById('lightbox').classList.add('active');
     });
-  </script>
+  });
+  function closeLightbox(){ document.getElementById('lightbox').classList.remove('active'); }
+  document.getElementById('lightbox').addEventListener('click',e=>{ if(e.target.id==='lightbox') closeLightbox(); });
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeLightbox(); });
+
+  // Smart image fallback (handles spaces, hyphens, caps)
+  document.querySelectorAll('.smart-img').forEach(img=>{
+    img.addEventListener('error', function(){
+      const fallbacks = (this.getAttribute('data-fallback')||'').split(',').map(s=>s.trim()).filter(Boolean);
+      if(fallbacks.length){
+        this.setAttribute('data-fallback', fallbacks.slice(1).join(','));
+        this.src = fallbacks[0];
+      }
+    });
+  });
+</script>
 </body>
 </html>
