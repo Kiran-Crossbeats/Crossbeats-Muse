@@ -8,7 +8,6 @@
 <script src="https://cdn.tailwindcss.com"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
 <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
-
 <style>
   :root{ --orange:#ff6a00; --amber:#ffb347; --bg:#06060a; }
   *{-webkit-tap-highlight-color:transparent;}
@@ -30,19 +29,18 @@
   @keyframes float{0%,100%{transform:translate(0,0) scale(1);}50%{transform:translate(50px,-50px) scale(1.1);}}
 
   .cursor-dot,.cursor-ring{position:fixed;top:0;left:0;pointer-events:none;z-index:9999;border-radius:9999px;transform:translate(-50%,-50%);}
-  .cursor-dot{width:6px;height:6px;background:#ff6a00;transition:transform .1s;}
-  .cursor-ring{width:36px;height:36px;border:1.5px solid rgba(255,106,0,0.6);transition:transform .2s ease, width .2s, height .2s, background .2s;}
+  .cursor-dot{width:6px;height:6px;background:#ff6a00;}
+  .cursor-ring{width:36px;height:36px;border:1.5px solid rgba(255,106,0,0.6);transition:transform .2s ease,width .2s,height .2s,background .2s;}
   .cursor-ring.hover{width:60px;height:60px;background:rgba(255,106,0,0.1);border-color:#ff6a00;}
   @media (max-width:768px){.cursor-dot,.cursor-ring{display:none;}}
 
-  .glass{background:rgba(18,18,24,0.55);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.08);}
+  .glass{background:rgba(18,18,24,0.55);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.08);}
   .glass-strong{background:rgba(14,14,20,0.85);backdrop-filter:blur(24px);border:1px solid rgba(255,106,0,0.15);}
-  .gradient-border{position:relative;background:linear-gradient(#0b0b11,#0b0b11) padding-box, linear-gradient(135deg,#ff6a00,#ffb347,#ff6a00) border-box;border:1px solid transparent;background-size:100% 100%, 200% 200%;animation:borderShift 6s linear infinite;}
-  @keyframes borderShift{0%{background-position:0 0, 0% 50%;}100%{background-position:0 0, 200% 50%;}}
+  .gradient-border{background:linear-gradient(#0b0b11,#0b0b11) padding-box, linear-gradient(135deg,#ff6a00,#ffb347,#ff6a00) border-box;border:1px solid transparent;background-size:100% 100%,200% 200%;animation:borderShift 6s linear infinite;}
+  @keyframes borderShift{0%{background-position:0 0,0% 50%;}100%{background-position:0 0,200% 50%;}}
 
   .card-hover{transition:all .5s cubic-bezier(.4,0,.2,1);}
   .card-hover:hover{transform:translateY(-6px);box-shadow:0 30px 60px -20px rgba(255,106,0,.25);}
-
   .text-gradient{background:linear-gradient(135deg,#ff6a00 0%,#ffb347 50%,#ff6a00 100%);background-size:200% 200%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:gradient 4s ease infinite;}
   @keyframes gradient{0%,100%{background-position:0% 50%;}50%{background-position:100% 50%;}}
 
@@ -54,13 +52,12 @@
   .nav-link::after{content:'';position:absolute;left:0;bottom:-4px;width:0;height:2px;background:linear-gradient(90deg,#ff6a00,#ffb347);transition:width .3s;}
   .nav-link:hover::after{width:100%;}
 
-  .btn-primary{position:relative;overflow:hidden;background:linear-gradient(135deg,#ff6a00,#ff8c33);transition:transform .3s, box-shadow .3s;}
+  .btn-primary{position:relative;overflow:hidden;background:linear-gradient(135deg,#ff6a00,#ff8c33);transition:transform .3s,box-shadow .3s;}
   .btn-primary::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.3),transparent);transition:left .6s;}
   .btn-primary:hover{transform:translateY(-2px);box-shadow:0 20px 40px -10px rgba(255,106,0,.5);}
   .btn-primary:hover::before{left:100%;}
 
   .scroll-progress{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,#ff6a00,#ffb347);z-index:9999;width:0;}
-
   .section-num{font-family:'Space Grotesk',sans-serif;font-size:120px;font-weight:700;background:linear-gradient(180deg,rgba(255,106,0,.15),transparent);-webkit-background-clip:text;background-clip:text;color:transparent;line-height:1;pointer-events:none;}
 
   .layer-card{transition:all .4s;border-left:2px solid transparent;}
@@ -71,91 +68,45 @@
   .mobile-menu{transform:translateX(100%);transition:transform .4s cubic-bezier(.4,0,.2,1);}
   .mobile-menu.open{transform:translateX(0);}
 
-  .noise::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:1;opacity:.03;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence baseFrequency='0.9'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");}
-
-  /* HERO CAROUSEL */
-  .hero-stage{
-    position:relative;width:100%;aspect-ratio:1/1;max-height:620px;
-    overflow:hidden;border-radius:32px;user-select:none;touch-action:pan-y;
-  }
-  .hero-slide{
-    position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:2.5rem;
-    opacity:0;
-    transform:translateX(80%) scale(.92);
-    transition:transform .4s cubic-bezier(.22,1,.36,1), opacity .3s ease;
-    will-change:transform,opacity;pointer-events:none;
-  }
+  .hero-stage{position:relative;width:100%;aspect-ratio:1/1;max-height:620px;overflow:hidden;border-radius:32px;user-select:none;touch-action:pan-y;}
+  .hero-slide{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:2.5rem;opacity:0;transform:translateX(80%) scale(.92);transition:transform .4s cubic-bezier(.22,1,.36,1),opacity .3s ease;pointer-events:none;}
   .hero-slide.active{opacity:1;transform:translateX(0) scale(1);z-index:2;pointer-events:auto;}
   .hero-slide.prev{opacity:0;transform:translateX(-80%) scale(.92);}
-  .hero-slide img{
-    max-width:92%;max-height:92%;object-fit:contain;
-    filter:drop-shadow(0 30px 50px rgba(255,106,0,.22)) drop-shadow(0 10px 20px rgba(0,0,0,.45));
-    animation:slideFloat 5s ease-in-out infinite;
-  }
+  .hero-slide img{max-width:92%;max-height:92%;object-fit:contain;filter:drop-shadow(0 30px 50px rgba(255,106,0,.22)) drop-shadow(0 10px 20px rgba(0,0,0,.45));animation:slideFloat 5s ease-in-out infinite;}
   @keyframes slideFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-12px);}}
+  .hero-stage::before{content:'';position:absolute;inset:12%;background:radial-gradient(circle,rgba(255,106,0,.32),transparent 60%);filter:blur(55px);z-index:1;pointer-events:none;}
 
-  .hero-stage::before{
-    content:'';position:absolute;inset:12%;
-    background:radial-gradient(circle,rgba(255,106,0,.32),transparent 60%);
-    filter:blur(55px);z-index:1;pointer-events:none;
-  }
-
-  .thumb{
-    position:relative;aspect-ratio:1/1;border-radius:14px;overflow:hidden;cursor:pointer;
-    border:2px solid rgba(255,255,255,.06);background:rgba(20,20,28,.5);
-    transition:all .25s cubic-bezier(.22,1,.36,1);
-  }
+  .thumb{position:relative;aspect-ratio:1/1;border-radius:14px;overflow:hidden;cursor:pointer;border:2px solid rgba(255,255,255,.06);background:rgba(20,20,28,.5);transition:all .25s;}
   .thumb img{width:100%;height:100%;object-fit:cover;transition:transform .3s,filter .3s;filter:grayscale(35%) brightness(.78);}
   .thumb:hover{border-color:rgba(255,106,0,.45);transform:translateY(-2px);}
   .thumb:hover img{filter:none;transform:scale(1.06);}
-  .thumb.active{
-    border-color:#ff6a00;
-    box-shadow:0 0 0 1px #ff6a00, 0 12px 28px -8px rgba(255,106,0,.55);
-  }
+  .thumb.active{border-color:#ff6a00;box-shadow:0 0 0 1px #ff6a00,0 12px 28px -8px rgba(255,106,0,.55);}
   .thumb.active img{filter:none;}
-  .thumb .progress{
-    position:absolute;left:0;right:0;bottom:0;height:3px;z-index:3;
-    background:linear-gradient(90deg,#ff6a00,#ffb347);width:0%;
-  }
+  .thumb .progress{position:absolute;left:0;right:0;bottom:0;height:3px;z-index:3;background:linear-gradient(90deg,#ff6a00,#ffb347);width:0%;}
   .thumb.active .progress{animation:thumbProgress 4.5s linear forwards;}
   @keyframes thumbProgress{from{width:0%;}to{width:100%;}}
 
-  .carousel-ctrl{
-    position:absolute;top:50%;transform:translateY(-50%);
-    width:44px;height:44px;border-radius:9999px;
-    background:rgba(14,14,20,.75);backdrop-filter:blur(10px);
-    border:1px solid rgba(255,106,0,.3);color:#fff;
-    display:flex;align-items:center;justify-content:center;
-    cursor:pointer;z-index:5;transition:all .25s;opacity:0;
-  }
+  .carousel-ctrl{position:absolute;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:9999px;background:rgba(14,14,20,.75);backdrop-filter:blur(10px);border:1px solid rgba(255,106,0,.3);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:5;transition:all .25s;opacity:0;}
   .hero-stage:hover .carousel-ctrl{opacity:1;}
   .carousel-ctrl:hover{background:#ff6a00;transform:translateY(-50%) scale(1.08);}
   .ctrl-prev{left:12px;} .ctrl-next{right:12px;}
 
-  .variant-badge{
-    position:absolute;top:16px;left:16px;z-index:4;
-    padding:5px 12px;border-radius:9999px;
-    background:rgba(14,14,20,.85);backdrop-filter:blur(10px);
-    border:1px solid rgba(255,106,0,.3);
-    font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#ff6a00;
-    opacity:0;transform:translateY(-8px);transition:all .3s .15s;
-  }
+  .variant-badge{position:absolute;top:16px;left:16px;z-index:4;padding:5px 12px;border-radius:9999px;background:rgba(14,14,20,.85);backdrop-filter:blur(10px);border:1px solid rgba(255,106,0,.3);font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#ff6a00;opacity:0;transform:translateY(-8px);transition:all .3s .15s;}
   .hero-slide.active .variant-badge{opacity:1;transform:translateY(0);}
 
   .dot-indicators{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);display:flex;gap:7px;z-index:4;}
   .dot{width:7px;height:7px;border-radius:9999px;background:rgba(255,255,255,.25);cursor:pointer;transition:all .25s;}
   .dot.active{background:#ff6a00;width:24px;}
 
-  .lifestyle-img{transition:transform .7s cubic-bezier(.22,1,.36,1);}
+  .lifestyle-img{width:100%;display:block;border-radius:16px;transition:transform .7s cubic-bezier(.22,1,.36,1);}
   .lifestyle-wrap:hover .lifestyle-img{transform:scale(1.03);}
 
   .lightbox{position:fixed;inset:0;background:rgba(0,0,0,.95);z-index:100;display:none;align-items:center;justify-content:center;padding:2rem;}
-  .lightbox.active{display:flex;animation:fadeIn .25s;}
-  @keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+  .lightbox.active{display:flex;}
   .lightbox img{max-width:90%;max-height:85vh;border-radius:12px;}
 </style>
 </head>
-<body class="antialiased selection:bg-orange-500 selection:text-white noise">
+<body class="antialiased selection:bg-orange-500 selection:text-white">
 
 <div class="cursor-ring"></div>
 <div class="cursor-dot"></div>
@@ -164,7 +115,6 @@
 <div class="orb orb-1"></div>
 <div class="orb orb-2"></div>
 
-<!-- NAV -->
 <nav class="fixed top-0 w-full z-50 glass-strong">
   <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
     <a href="#showcase" class="flex items-center gap-2">
@@ -203,7 +153,6 @@
 <!-- HERO -->
 <section id="showcase" class="relative min-h-screen flex items-center pt-28 pb-16 px-6">
   <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center w-full">
-
     <div class="lg:col-span-5 space-y-7 order-2 lg:order-1" data-aos="fade-right">
       <div class="inline-flex items-center gap-2 py-2 px-4 rounded-full glass text-orange-400 text-xs font-bold uppercase tracking-widest">
         <span class="relative flex h-2 w-2">
@@ -212,18 +161,13 @@
         </span>
         Open Wearable Stereo
       </div>
-
-      <h1 class="font-display text-4xl sm:text-6xl font-black leading-[0.95]">
-        Open Ear.<br><span class="text-gradient">Infinite Sound.</span>
-      </h1>
-
+      <h1 class="font-display text-4xl sm:text-6xl font-black leading-[0.95]">Open Ear.<br><span class="text-gradient">Infinite Sound.</span></h1>
       <p class="text-zinc-400 text-base md:text-lg max-w-xl leading-relaxed">
         <strong class="text-white">Crossbeats Muse</strong> — featherlight open-ear earbuds with
         <strong class="text-orange-400">Bluetooth 6.0</strong>, a
         <strong class="text-orange-400">5-layer driver</strong>, and
         <strong class="text-orange-400">40-hour</strong> playtime.
       </p>
-
       <div>
         <div class="flex items-center justify-between mb-3">
           <span class="text-xs font-bold text-zinc-500 uppercase tracking-widest">Explore the Product</span>
@@ -231,7 +175,6 @@
         </div>
         <div class="grid grid-cols-5 lg:grid-cols-3 gap-2.5" id="thumbList"></div>
       </div>
-
       <div class="pt-2 grid grid-cols-3 gap-4 border-t border-white/10 max-w-lg">
         <div><p class="font-display text-2xl md:text-3xl font-bold text-gradient" data-count="6.0">0</p><p class="text-xs text-zinc-500 uppercase tracking-wider mt-1">Bluetooth</p></div>
         <div><p class="font-display text-2xl md:text-3xl font-bold text-gradient" data-count="40">0</p><p class="text-xs text-zinc-500 uppercase tracking-wider mt-1">Hour Battery</p></div>
@@ -259,7 +202,6 @@
   </div>
 </section>
 
-<!-- MARQUEE -->
 <div class="marquee py-6 border-y border-white/10 glass">
   <div class="marquee-track whitespace-nowrap text-2xl font-display font-bold text-zinc-500">
     <span>OPEN EAR DESIGN</span><span class="text-orange-500">●</span>
@@ -277,15 +219,13 @@
   </div>
 </div>
 
-<!-- LIFESTYLE SECTION (BULLETPROOF CASE DETECTOR) -->
+<!-- LIFESTYLE — direct file, no JS loader -->
 <section id="lifestyle" class="relative py-28 px-6 max-w-7xl mx-auto">
   <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
     <div class="lg:col-span-5 space-y-6" data-aos="fade-right">
       <span class="text-orange-500 text-xs font-bold uppercase tracking-widest">A Lifestyle Statement</span>
       <h2 class="font-display text-4xl md:text-6xl font-black">More than audio. <span class="text-gradient">A Lifestyle.</span></h2>
-      <p class="text-zinc-400 text-lg leading-relaxed">
-        Designed for the way you live — from morning commutes and intense workouts to late-night calls and weekend adventures.
-      </p>
+      <p class="text-zinc-400 text-lg leading-relaxed">Designed for the way you live — from morning commutes and intense workouts to late-night calls and weekend adventures.</p>
       <div class="grid grid-cols-2 gap-4 pt-4">
         <div class="glass p-5 rounded-2xl"><div class="text-2xl mb-2">🏃</div><h4 class="font-bold text-white mb-1">Active Life</h4><p class="text-xs text-zinc-500">Workouts, runs, sports</p></div>
         <div class="glass p-5 rounded-2xl"><div class="text-2xl mb-2">💼</div><h4 class="font-bold text-white mb-1">Work Mode</h4><p class="text-xs text-zinc-500">Calls, meetings, focus</p></div>
@@ -294,7 +234,7 @@
       </div>
     </div>
     <div class="lg:col-span-7 lifestyle-wrap overflow-hidden rounded-3xl gradient-border p-2" data-aos="fade-left">
-      <img id="lifestyleImg" src="lifestyle.png" alt="Crossbeats Muse Lifestyle" class="lifestyle-img w-full rounded-2xl border border-white/10">
+      <img src="lifestyle.png" alt="Crossbeats Muse Lifestyle" class="lifestyle-img">
     </div>
   </div>
 </section>
@@ -310,7 +250,7 @@
   <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
     <div class="lg:col-span-7" data-aos="zoom-in">
       <div class="gradient-border rounded-3xl p-2">
-        <img src="driver.png" alt="Driver Architecture" class="w-full rounded-2xl border border-white/10">
+        <img src="driver.png" alt="Driver Architecture" class="w-full rounded-2xl">
       </div>
     </div>
     <div class="lg:col-span-5 space-y-3" data-aos="fade-left">
@@ -335,13 +275,13 @@
       <span class="text-xs font-bold text-orange-400 uppercase tracking-wider">Flagship Silicon</span>
       <h3 class="font-display text-3xl font-black mt-2 mb-3">Bluetooth 6.0</h3>
       <p class="text-zinc-400 text-sm mb-6">Smarter power use, stable connection, ultra-low audio lag for gaming and video.</p>
-      <img src="bluetooth%20.png" onerror="this.onerror=null; this.src='bluetooth.png';" alt="Bluetooth 6.0" class="w-full rounded-2xl border border-white/10">
+      <img src="bluetooth%20.png" alt="Bluetooth 6.0" class="w-full rounded-2xl">
     </div>
     <div class="md:col-span-3 glass rounded-3xl p-8 card-hover" data-aos="fade-up" data-aos-delay="80">
       <span class="text-xs font-bold text-green-400 uppercase tracking-wider">Power That Lasts</span>
       <h3 class="font-display text-3xl font-black mt-2 mb-3">40H Playtime</h3>
       <p class="text-zinc-400 text-sm mb-6">Days without charging. Type-C snap charge for quick top-ups.</p>
-      <img src="battery.png" alt="40H Battery" class="w-full rounded-2xl border border-white/10">
+      <img src="battery.png" alt="40H Battery" class="w-full rounded-2xl">
     </div>
     <div class="md:col-span-6 glass rounded-3xl p-8 md:p-12 card-hover grid grid-cols-1 lg:grid-cols-2 gap-8 items-center" data-aos="fade-up">
       <div class="space-y-5">
@@ -354,7 +294,7 @@
           <li class="flex items-center gap-3"><span class="w-6 h-6 rounded-full bg-orange-500/20 flex items-center justify-center text-orange-400 text-xs">✓</span><span><strong>One-hand flip ergonomics</strong></span></li>
         </ul>
       </div>
-      <div><img src="premium-case.png" alt="Premium Case" class="w-full rounded-2xl border border-white/10"></div>
+      <div><img src="premium-case.png" alt="Premium Case" class="w-full rounded-2xl"></div>
     </div>
   </div>
 </section>
@@ -371,7 +311,7 @@
       <span class="text-xs font-bold text-orange-400 uppercase tracking-wider">Sports Ready</span>
       <h3 class="font-display text-2xl font-bold mt-2 mb-3">Secure Through Every Move</h3>
       <p class="text-zinc-400 text-sm mb-6">Flexible memory hook contours your ear — tested for workouts and sprints.</p>
-      <img src="secure-fit.png" alt="Secure Fit" class="w-full rounded-2xl border border-white/10">
+      <img src="secure-fit.png" alt="Secure Fit" class="w-full rounded-2xl">
     </div>
     <div class="glass rounded-3xl p-8 card-hover" data-aos="fade-left">
       <span class="text-xs font-bold text-orange-400 uppercase tracking-wider">Quick Guide</span>
@@ -381,7 +321,7 @@
         <p class="flex gap-3"><span class="font-bold text-orange-400">02</span> Guide the orange hook around ear rim</p>
         <p class="flex gap-3"><span class="font-bold text-orange-400">03</span> Centre until it feels secure</p>
       </div>
-      <img src="how-to-wear.png" alt="How to Wear" class="w-full rounded-2xl border border-white/10">
+      <img src="how-to-wear.png" alt="How to Wear" class="w-full rounded-2xl">
     </div>
   </div>
 </section>
@@ -403,39 +343,14 @@
   </div>
 </section>
 
-<footer class="py-10 px-6 border-t border-white/10 text-center text-xs text-zinc-600">
-  © 2026 Crossbeats. All Rights Reserved.
-</footer>
+<footer class="py-10 px-6 border-t border-white/10 text-center text-xs text-zinc-600">© 2026 Crossbeats. All Rights Reserved.</footer>
 
 <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
 <script>
 (function(){
   'use strict';
-
   AOS.init({ duration:800, easing:'ease-out-cubic', once:true, offset:60 });
 
-  /* ---------- BULLETPROOF LIFESTYLE IMAGE FINDER ---------- */
-  const lifestyleCandidates = [
-    'lifestyle.png',
-    'Lifestyle.png',
-    'lifestyle.PNG',
-    'Lifestyle.PNG',
-    'lifestyle .png',
-    'Lifestyle .png',
-    'hero-1.png'
-  ];
-  let lsIdx = 0;
-  const lsImg = document.getElementById('lifestyleImg');
-  if (lsImg) {
-    lsImg.onerror = function() {
-      lsIdx++;
-      if (lsIdx < lifestyleCandidates.length) {
-        this.src = lifestyleCandidates[lsIdx];
-      }
-    };
-  }
-
-  /* cursor */
   const dot = document.querySelector('.cursor-dot');
   const ring = document.querySelector('.cursor-ring');
   if (window.matchMedia('(min-width:769px)').matches) {
@@ -447,20 +362,16 @@
     });
   }
 
-  /* scroll progress */
   window.addEventListener('scroll', () => {
     const h = document.documentElement;
-    const p = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
-    document.getElementById('progress').style.width = p + '%';
+    document.getElementById('progress').style.width = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100 + '%';
   }, { passive:true });
 
-  /* mobile menu */
   const menu = document.getElementById('mobileMenu');
   document.getElementById('menuBtn').onclick = () => menu.classList.add('open');
   document.getElementById('closeBtn').onclick = () => menu.classList.remove('open');
   document.querySelectorAll('.menu-link').forEach(l => l.onclick = () => menu.classList.remove('open'));
 
-  /* counters */
   const ioCount = new IntersectionObserver(entries => {
     entries.forEach(e => {
       if (!e.isIntersecting) return;
@@ -479,7 +390,6 @@
   }, { threshold:0.4 });
   document.querySelectorAll('[data-count]').forEach(c => ioCount.observe(c));
 
-  /* LIGHTBOX */
   const lightbox = document.getElementById('lightbox');
   const lightboxImg = document.getElementById('lightboxImg');
   function openLightbox(src){ lightboxImg.src = src; lightbox.classList.add('active'); }
@@ -487,7 +397,6 @@
   document.getElementById('closeLightboxBtn').onclick = closeLightbox;
   lightbox.addEventListener('click', e => { if (e.target === lightbox) closeLightbox(); });
 
-  /* HERO CAROUSEL */
   const slides = [
     { src:'hero-1.png', color:'Carbon + Orange' },
     { src:'hero-2.png', color:'Compact Case' },
@@ -503,27 +412,24 @@
   const stage = document.getElementById('heroStage');
   const thumbList = document.getElementById('thumbList');
   const dotsWrap = document.getElementById('dotIndicators');
-  const totalEl = document.getElementById('totalSlides');
-  const currentEl = document.getElementById('currentSlide');
-  totalEl.textContent = slides.length;
+  document.getElementById('totalSlides').textContent = slides.length;
 
   slides.forEach((s, i) => {
     const slide = document.createElement('div');
     slide.className = 'hero-slide' + (i === 0 ? ' active' : '');
-    slide.innerHTML = `<div class="variant-badge">${s.color}</div><img src="${s.src}" alt="${s.color}">`;
+    slide.innerHTML = '<div class="variant-badge">'+s.color+'</div><img src="'+s.src+'" alt="'+s.color+'">';
     stage.insertBefore(slide, document.getElementById('prevBtn'));
 
     const thumb = document.createElement('button');
     thumb.type = 'button';
     thumb.className = 'thumb' + (i === 0 ? ' active' : '');
-    thumb.innerHTML = `<img src="${s.src}" alt="${s.color}"><div class="progress"></div>`;
+    thumb.innerHTML = '<img src="'+s.src+'" alt="'+s.color+'"><div class="progress"></div>';
     thumb.addEventListener('click', () => goTo(i, true));
     thumbList.appendChild(thumb);
 
     const d = document.createElement('button');
     d.type = 'button';
     d.className = 'dot' + (i === 0 ? ' active' : '');
-    d.setAttribute('aria-label', 'Go to slide ' + (i+1));
     d.addEventListener('click', () => goTo(i, true));
     dotsWrap.appendChild(d);
   });
@@ -531,53 +437,39 @@
   let current = 0;
   let autoplayTimer = null;
   let heroInView = true;
-  const AUTOPLAY_MS = 4500;
 
   function goTo(index, userTriggered) {
     const slideEls = stage.querySelectorAll('.hero-slide');
     const thumbEls = thumbList.querySelectorAll('.thumb');
     const dotEls = dotsWrap.querySelectorAll('.dot');
-
     index = (index + slides.length) % slides.length;
     const prev = current;
     current = index;
-
     slideEls.forEach((s, i) => {
-      s.classList.remove('active', 'prev');
+      s.classList.remove('active','prev');
       if (i === index) s.classList.add('active');
       else if (i === prev) s.classList.add('prev');
     });
     thumbEls.forEach((t, i) => t.classList.toggle('active', i === index));
     dotEls.forEach((d, i) => d.classList.toggle('active', i === index));
-    currentEl.textContent = index + 1;
-
+    document.getElementById('currentSlide').textContent = index + 1;
     if (userTriggered) restartAutoplay();
   }
 
-  function next() { goTo(current + 1, false); }
+  function next(){ goTo(current + 1, false); }
+  function stopAutoplay(){ if (autoplayTimer) { clearInterval(autoplayTimer); autoplayTimer = null; } }
+  function startAutoplay(){ stopAutoplay(); if (!heroInView) return; autoplayTimer = setInterval(next, 4500); }
+  function restartAutoplay(){ stopAutoplay(); startAutoplay(); }
 
-  function startAutoplay() {
-    stopAutoplay();
-    if (!heroInView) return;
-    autoplayTimer = setInterval(next, AUTOPLAY_MS);
-  }
-  function stopAutoplay() {
-    if (autoplayTimer) { clearInterval(autoplayTimer); autoplayTimer = null; }
-  }
-  function restartAutoplay() { stopAutoplay(); startAutoplay(); }
-
-  const heroIO = new IntersectionObserver(entries => {
+  new IntersectionObserver(entries => {
     entries.forEach(e => {
       heroInView = e.isIntersecting;
-      if (heroInView) startAutoplay();
-      else stopAutoplay();
+      if (heroInView) startAutoplay(); else stopAutoplay();
     });
-  }, { threshold: 0.15 });
-  heroIO.observe(document.getElementById('showcase'));
+  }, { threshold: 0.15 }).observe(document.getElementById('showcase'));
 
   document.getElementById('nextBtn').addEventListener('click', () => goTo(current + 1, true));
   document.getElementById('prevBtn').addEventListener('click', () => goTo(current - 1, true));
-
   stage.addEventListener('mouseenter', stopAutoplay);
   stage.addEventListener('mouseleave', () => { if (heroInView) startAutoplay(); });
 
@@ -588,9 +480,7 @@
     if (Math.abs(diff) > 40) goTo(current + (diff < 0 ? 1 : -1), true);
   }, { passive:true });
 
-  stage.addEventListener('click', e => {
-    if (e.target.tagName === 'IMG') openLightbox(e.target.src);
-  });
+  stage.addEventListener('click', e => { if (e.target.tagName === 'IMG') openLightbox(e.target.src); });
 
   document.querySelectorAll('a,button,.thumb,.layer-card,.dot').forEach(el => {
     el.addEventListener('mouseenter', () => ring.classList.add('hover'));
