@@ -12,7 +12,7 @@
 <style>
   :root{ --orange:#ff6a00; --amber:#ffb347; --bg:#06060a; }
   *{-webkit-tap-highlight-color:transparent;}
-  html,body{background:var(--bg);color:#f4f4f5;font-family:'Inter',sans-serif;overflow-x:hidden;}
+  html,body{background:var(--bg);color:#f4f4f5;font-family:'Inter',sans-serif;overflow-x:hidden;overflow-anchor:none;}
   @media (min-width:769px){ html,body{cursor:none;} }
   .font-display{font-family:'Space Grotesk',sans-serif;letter-spacing:-0.02em;}
 
@@ -73,7 +73,7 @@
 
   .noise::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:1;opacity:.03;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence baseFrequency='0.9'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");}
 
-  /* ===== HERO CAROUSEL (FAST) ===== */
+  /* HERO CAROUSEL */
   .hero-stage{
     position:relative;width:100%;aspect-ratio:1/1;max-height:620px;
     overflow:hidden;border-radius:32px;user-select:none;touch-action:pan-y;
@@ -153,10 +153,6 @@
   .lightbox.active{display:flex;animation:fadeIn .25s;}
   @keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
   .lightbox img{max-width:90%;max-height:85vh;border-radius:12px;}
-
-  /* prevent scroll anchoring jumps */
-  body{overflow-anchor:none;}
-  #showcase, #heroStage, #thumbList{overflow-anchor:none;}
 </style>
 </head>
 <body class="antialiased selection:bg-orange-500 selection:text-white noise">
@@ -281,7 +277,7 @@
   </div>
 </div>
 
-<!-- LIFESTYLE -->
+<!-- LIFESTYLE SECTION (FIXED DIRECT IMAGE LOADING) -->
 <section id="lifestyle" class="relative py-28 px-6 max-w-7xl mx-auto">
   <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
     <div class="lg:col-span-5 space-y-6" data-aos="fade-right">
@@ -298,7 +294,8 @@
       </div>
     </div>
     <div class="lg:col-span-7 lifestyle-wrap overflow-hidden rounded-3xl gradient-border p-2" data-aos="fade-left">
-      <img data-src="lifestyle.png" alt="Crossbeats Muse Lifestyle" class="smart-img lifestyle-img w-full rounded-2xl">
+      <!-- Direct clean HTML tag with automatic fallback -->
+      <img src="lifestyle.png" onerror="this.onerror=null; this.src='Lifestyle.png';" alt="Crossbeats Muse Lifestyle" class="lifestyle-img w-full rounded-2xl border border-white/10">
     </div>
   </div>
 </section>
@@ -314,7 +311,7 @@
   <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
     <div class="lg:col-span-7" data-aos="zoom-in">
       <div class="gradient-border rounded-3xl p-2">
-        <img data-src="driver.png" alt="Driver Architecture" class="smart-img w-full rounded-2xl">
+        <img src="driver.png" alt="Driver Architecture" class="w-full rounded-2xl border border-white/10">
       </div>
     </div>
     <div class="lg:col-span-5 space-y-3" data-aos="fade-left">
@@ -339,14 +336,13 @@
       <span class="text-xs font-bold text-orange-400 uppercase tracking-wider">Flagship Silicon</span>
       <h3 class="font-display text-3xl font-black mt-2 mb-3">Bluetooth 6.0</h3>
       <p class="text-zinc-400 text-sm mb-6">Smarter power use, stable connection, ultra-low audio lag for gaming and video.</p>
-      <!-- EXACT filename with space encoded -->
-      <img data-src="bluetooth .png" alt="Bluetooth 6.0" class="smart-img w-full rounded-2xl">
+      <img src="bluetooth%20.png" onerror="this.onerror=null; this.src='bluetooth.png';" alt="Bluetooth 6.0" class="w-full rounded-2xl border border-white/10">
     </div>
     <div class="md:col-span-3 glass rounded-3xl p-8 card-hover" data-aos="fade-up" data-aos-delay="80">
       <span class="text-xs font-bold text-green-400 uppercase tracking-wider">Power That Lasts</span>
       <h3 class="font-display text-3xl font-black mt-2 mb-3">40H Playtime</h3>
       <p class="text-zinc-400 text-sm mb-6">Days without charging. Type-C snap charge for quick top-ups.</p>
-      <img data-src="battery.png" alt="40H Battery" class="smart-img w-full rounded-2xl">
+      <img src="battery.png" alt="40H Battery" class="w-full rounded-2xl border border-white/10">
     </div>
     <div class="md:col-span-6 glass rounded-3xl p-8 md:p-12 card-hover grid grid-cols-1 lg:grid-cols-2 gap-8 items-center" data-aos="fade-up">
       <div class="space-y-5">
@@ -359,7 +355,7 @@
           <li class="flex items-center gap-3"><span class="w-6 h-6 rounded-full bg-orange-500/20 flex items-center justify-center text-orange-400 text-xs">✓</span><span><strong>One-hand flip ergonomics</strong></span></li>
         </ul>
       </div>
-      <div><img data-src="premium-case.png" alt="Premium Case" class="smart-img w-full rounded-2xl"></div>
+      <div><img src="premium-case.png" alt="Premium Case" class="w-full rounded-2xl border border-white/10"></div>
     </div>
   </div>
 </section>
@@ -376,7 +372,7 @@
       <span class="text-xs font-bold text-orange-400 uppercase tracking-wider">Sports Ready</span>
       <h3 class="font-display text-2xl font-bold mt-2 mb-3">Secure Through Every Move</h3>
       <p class="text-zinc-400 text-sm mb-6">Flexible memory hook contours your ear — tested for workouts and sprints.</p>
-      <img data-src="secure-fit.png" alt="Secure Fit" class="smart-img w-full rounded-2xl">
+      <img src="secure-fit.png" alt="Secure Fit" class="w-full rounded-2xl border border-white/10">
     </div>
     <div class="glass rounded-3xl p-8 card-hover" data-aos="fade-left">
       <span class="text-xs font-bold text-orange-400 uppercase tracking-wider">Quick Guide</span>
@@ -386,7 +382,7 @@
         <p class="flex gap-3"><span class="font-bold text-orange-400">02</span> Guide the orange hook around ear rim</p>
         <p class="flex gap-3"><span class="font-bold text-orange-400">03</span> Centre until it feels secure</p>
       </div>
-      <img data-src="how-to-wear.png" alt="How to Wear" class="smart-img w-full rounded-2xl">
+      <img src="how-to-wear.png" alt="How to Wear" class="w-full rounded-2xl border border-white/10">
     </div>
   </div>
 </section>
@@ -419,7 +415,7 @@
 
   AOS.init({ duration:800, easing:'ease-out-cubic', once:true, offset:60 });
 
-  /* ---------- cursor ---------- */
+  /* cursor */
   const dot = document.querySelector('.cursor-dot');
   const ring = document.querySelector('.cursor-ring');
   if (window.matchMedia('(min-width:769px)').matches) {
@@ -431,20 +427,20 @@
     });
   }
 
-  /* ---------- scroll progress (read-only, no scroll writes) ---------- */
+  /* scroll progress */
   window.addEventListener('scroll', () => {
     const h = document.documentElement;
     const p = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
     document.getElementById('progress').style.width = p + '%';
   }, { passive:true });
 
-  /* ---------- mobile menu ---------- */
+  /* mobile menu */
   const menu = document.getElementById('mobileMenu');
   document.getElementById('menuBtn').onclick = () => menu.classList.add('open');
   document.getElementById('closeBtn').onclick = () => menu.classList.remove('open');
   document.querySelectorAll('.menu-link').forEach(l => l.onclick = () => menu.classList.remove('open'));
 
-  /* ---------- counters ---------- */
+  /* counters */
   const ioCount = new IntersectionObserver(entries => {
     entries.forEach(e => {
       if (!e.isIntersecting) return;
@@ -463,7 +459,7 @@
   }, { threshold:0.4 });
   document.querySelectorAll('[data-count]').forEach(c => ioCount.observe(c));
 
-  /* ---------- LIGHTBOX ---------- */
+  /* LIGHTBOX */
   const lightbox = document.getElementById('lightbox');
   const lightboxImg = document.getElementById('lightboxImg');
   function openLightbox(src){ lightboxImg.src = src; lightbox.classList.add('active'); }
@@ -471,68 +467,7 @@
   document.getElementById('closeLightboxBtn').onclick = closeLightbox;
   lightbox.addEventListener('click', e => { if (e.target === lightbox) closeLightbox(); });
 
-  /* =========================================================
-     BULLETPROOF IMAGE LOADER
-     Tries exact name, then encoded space, then common variants
-     ========================================================= */
-  function loadSmartImage(img) {
-    const original = img.getAttribute('data-src') || img.getAttribute('src') || '';
-    if (!original) return;
-
-    // Build candidate list from the requested name
-    const name = original.trim();
-    const candidates = [];
-
-    // 1. as-is
-    candidates.push(name);
-    // 2. encodeURI (handles spaces → %20)
-    candidates.push(encodeURI(name));
-    // 3. replace spaces with %20 manually
-    candidates.push(name.replace(/ /g, '%20'));
-    // 4. replace spaces with nothing / hyphen
-    candidates.push(name.replace(/ /g, ''));
-    candidates.push(name.replace(/ /g, '-'));
-    // 5. common case variants
-    candidates.push(name.toLowerCase());
-    candidates.push(name.replace(/ /g, '%20').toLowerCase());
-
-    // Extra known aliases for this project
-    if (/bluetooth/i.test(name)) {
-      candidates.push('bluetooth%20.png', 'bluetooth .png', 'bluetooth.png', 'Bluetooth.png');
-    }
-    if (/lifestyle/i.test(name)) {
-      candidates.push('lifestyle.png', 'Lifestyle.png', 'lifestyle.PNG');
-    }
-    if (/premium/i.test(name)) {
-      candidates.push('premium-case.png', 'premium case.png', 'premium-case.PNG', 'premium-.png');
-    }
-    if (/secure/i.test(name)) {
-      candidates.push('secure-fit.png', 'secure fit.png', 'secure-fit.PNG', 'secure-fit..png');
-    }
-    if (/how-to-wear|how to wear/i.test(name)) {
-      candidates.push('how-to-wear.png', 'how to wear.png', 'how-to-wear.PNG');
-    }
-
-    // unique
-    const list = [...new Set(candidates.filter(Boolean))];
-    let i = 0;
-
-    const tryNext = () => {
-      if (i >= list.length) return; // give up silently
-      img.onload = () => { img.style.opacity = '1'; };
-      img.onerror = () => { i++; tryNext(); };
-      img.style.opacity = '0.01';
-      img.src = list[i];
-    };
-    tryNext();
-  }
-
-  // Apply to all .smart-img
-  document.querySelectorAll('.smart-img').forEach(loadSmartImage);
-
-  /* =========================================================
-     HERO CAROUSEL — NO SCROLL SIDE EFFECTS
-     ========================================================= */
+  /* HERO CAROUSEL */
   const slides = [
     { src:'hero-1.png', color:'Carbon + Orange' },
     { src:'hero-2.png', color:'Compact Case' },
@@ -553,30 +488,18 @@
   totalEl.textContent = slides.length;
 
   slides.forEach((s, i) => {
-    // main slide
     const slide = document.createElement('div');
     slide.className = 'hero-slide' + (i === 0 ? ' active' : '');
-    slide.innerHTML = `<div class="variant-badge">${s.color}</div><img alt="${s.color}">`;
-    const slideImg = slide.querySelector('img');
-    slideImg.setAttribute('data-src', s.src);
-    loadSmartImage(slideImg);
-    stage.insertBefore(slide, stage.firstChild.nextSibling); // keep controls on top
-
-    // actually insert before controls
+    slide.innerHTML = `<div class="variant-badge">${s.color}</div><img src="${s.src}" alt="${s.color}">`;
     stage.insertBefore(slide, document.getElementById('prevBtn'));
 
-    // thumb
     const thumb = document.createElement('button');
     thumb.type = 'button';
     thumb.className = 'thumb' + (i === 0 ? ' active' : '');
-    thumb.innerHTML = `<img alt=""><div class="progress"></div>`;
-    const tImg = thumb.querySelector('img');
-    tImg.setAttribute('data-src', s.src);
-    loadSmartImage(tImg);
+    thumb.innerHTML = `<img src="${s.src}" alt="${s.color}"><div class="progress"></div>`;
     thumb.addEventListener('click', () => goTo(i, true));
     thumbList.appendChild(thumb);
 
-    // dot
     const d = document.createElement('button');
     d.type = 'button';
     d.className = 'dot' + (i === 0 ? ' active' : '');
@@ -608,7 +531,6 @@
     dotEls.forEach((d, i) => d.classList.toggle('active', i === index));
     currentEl.textContent = index + 1;
 
-    // ★ NO scrollIntoView / scrollTo / focus — ever
     if (userTriggered) restartAutoplay();
   }
 
@@ -616,7 +538,7 @@
 
   function startAutoplay() {
     stopAutoplay();
-    if (!heroInView) return; // only when hero visible
+    if (!heroInView) return;
     autoplayTimer = setInterval(next, AUTOPLAY_MS);
   }
   function stopAutoplay() {
@@ -624,7 +546,6 @@
   }
   function restartAutoplay() { stopAutoplay(); startAutoplay(); }
 
-  // Pause autoplay when hero leaves viewport → kills scroll-jump forever
   const heroIO = new IntersectionObserver(entries => {
     entries.forEach(e => {
       heroInView = e.isIntersecting;
@@ -637,11 +558,9 @@
   document.getElementById('nextBtn').addEventListener('click', () => goTo(current + 1, true));
   document.getElementById('prevBtn').addEventListener('click', () => goTo(current - 1, true));
 
-  // pause while hovering stage
   stage.addEventListener('mouseenter', stopAutoplay);
   stage.addEventListener('mouseleave', () => { if (heroInView) startAutoplay(); });
 
-  // swipe
   let startX = 0;
   stage.addEventListener('touchstart', e => { startX = e.touches[0].clientX; }, { passive:true });
   stage.addEventListener('touchend', e => {
@@ -649,20 +568,10 @@
     if (Math.abs(diff) > 40) goTo(current + (diff < 0 ? 1 : -1), true);
   }, { passive:true });
 
-  // click image → lightbox
   stage.addEventListener('click', e => {
     if (e.target.tagName === 'IMG') openLightbox(e.target.src);
   });
 
-  // keyboard (only when not typing)
-  document.addEventListener('keydown', e => {
-    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
-    if (e.key === 'Escape') closeLightbox();
-    if (e.key === 'ArrowRight') goTo(current + 1, true);
-    if (e.key === 'ArrowLeft')  goTo(current - 1, true);
-  });
-
-  // cursor hover grow
   document.querySelectorAll('a,button,.thumb,.layer-card,.dot').forEach(el => {
     el.addEventListener('mouseenter', () => ring.classList.add('hover'));
     el.addEventListener('mouseleave', () => ring.classList.remove('hover'));
