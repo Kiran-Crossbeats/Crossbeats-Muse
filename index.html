@@ -277,7 +277,7 @@
   </div>
 </div>
 
-<!-- LIFESTYLE SECTION (FIXED DIRECT IMAGE LOADING) -->
+<!-- LIFESTYLE SECTION (BULLETPROOF CASE DETECTOR) -->
 <section id="lifestyle" class="relative py-28 px-6 max-w-7xl mx-auto">
   <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
     <div class="lg:col-span-5 space-y-6" data-aos="fade-right">
@@ -294,8 +294,7 @@
       </div>
     </div>
     <div class="lg:col-span-7 lifestyle-wrap overflow-hidden rounded-3xl gradient-border p-2" data-aos="fade-left">
-      <!-- Direct clean HTML tag with automatic fallback -->
-      <img src="lifestyle.png" onerror="this.onerror=null; this.src='Lifestyle.png';" alt="Crossbeats Muse Lifestyle" class="lifestyle-img w-full rounded-2xl border border-white/10">
+      <img id="lifestyleImg" src="lifestyle.png" alt="Crossbeats Muse Lifestyle" class="lifestyle-img w-full rounded-2xl border border-white/10">
     </div>
   </div>
 </section>
@@ -414,6 +413,27 @@
   'use strict';
 
   AOS.init({ duration:800, easing:'ease-out-cubic', once:true, offset:60 });
+
+  /* ---------- BULLETPROOF LIFESTYLE IMAGE FINDER ---------- */
+  const lifestyleCandidates = [
+    'lifestyle.png',
+    'Lifestyle.png',
+    'lifestyle.PNG',
+    'Lifestyle.PNG',
+    'lifestyle .png',
+    'Lifestyle .png',
+    'hero-1.png'
+  ];
+  let lsIdx = 0;
+  const lsImg = document.getElementById('lifestyleImg');
+  if (lsImg) {
+    lsImg.onerror = function() {
+      lsIdx++;
+      if (lsIdx < lifestyleCandidates.length) {
+        this.src = lifestyleCandidates[lsIdx];
+      }
+    };
+  }
 
   /* cursor */
   const dot = document.querySelector('.cursor-dot');
