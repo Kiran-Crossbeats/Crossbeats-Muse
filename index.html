@@ -10,17 +10,12 @@
 <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
 
 <style>
-  :root{
-    --orange:#ff6a00;
-    --amber:#ffb347;
-    --bg:#06060a;
-  }
+  :root{ --orange:#ff6a00; --amber:#ffb347; --bg:#06060a; }
   *{-webkit-tap-highlight-color:transparent;}
-  html,body{background:var(--bg);color:#f4f4f5;font-family:'Inter',sans-serif;}
+  html,body{background:var(--bg);color:#f4f4f5;font-family:'Inter',sans-serif;overflow-x:hidden;}
   @media (min-width:769px){ html,body{cursor:none;} }
   .font-display{font-family:'Space Grotesk',sans-serif;letter-spacing:-0.02em;}
 
-  /* --- Animated grid background --- */
   .grid-bg{
     position:fixed;inset:0;z-index:-2;
     background-image:
@@ -34,14 +29,12 @@
   .orb-2{width:400px;height:400px;background:#ffb347;bottom:-100px;right:-100px;animation-delay:-6s;}
   @keyframes float{0%,100%{transform:translate(0,0) scale(1);}50%{transform:translate(50px,-50px) scale(1.1);}}
 
-  /* --- Custom cursor --- */
   .cursor-dot,.cursor-ring{position:fixed;top:0;left:0;pointer-events:none;z-index:9999;border-radius:9999px;transform:translate(-50%,-50%);}
   .cursor-dot{width:6px;height:6px;background:#ff6a00;transition:transform .1s;}
   .cursor-ring{width:36px;height:36px;border:1.5px solid rgba(255,106,0,0.6);transition:transform .2s ease, width .2s, height .2s, background .2s;}
   .cursor-ring.hover{width:60px;height:60px;background:rgba(255,106,0,0.1);border-color:#ff6a00;}
   @media (max-width:768px){.cursor-dot,.cursor-ring{display:none;}}
 
-  /* --- Glass / cards --- */
   .glass{background:rgba(18,18,24,0.55);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.08);}
   .glass-strong{background:rgba(14,14,20,0.85);backdrop-filter:blur(24px);border:1px solid rgba(255,106,0,0.15);}
   .gradient-border{position:relative;background:linear-gradient(#0b0b11,#0b0b11) padding-box, linear-gradient(135deg,#ff6a00,#ffb347,#ff6a00) border-box;border:1px solid transparent;background-size:100% 100%, 200% 200%;animation:borderShift 6s linear infinite;}
@@ -50,220 +43,135 @@
   .card-hover{transition:all .5s cubic-bezier(.4,0,.2,1);}
   .card-hover:hover{transform:translateY(-6px);box-shadow:0 30px 60px -20px rgba(255,106,0,.25);}
 
-  /* --- Text gradient --- */
   .text-gradient{background:linear-gradient(135deg,#ff6a00 0%,#ffb347 50%,#ff6a00 100%);background-size:200% 200%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:gradient 4s ease infinite;}
   @keyframes gradient{0%,100%{background-position:0% 50%;}50%{background-position:100% 50%;}}
 
-  /* --- Marquee --- */
   .marquee{overflow:hidden;}
-  .marquee-track{display:flex;gap:4rem;animation:marquee 30s linear infinite;}
+  .marquee-track{display:flex;gap:4rem;animation:marquee 30s linear infinite;width:max-content;}
   @keyframes marquee{from{transform:translateX(0);}to{transform:translateX(-50%);}}
 
-  /* --- Reveal underline on nav --- */
   .nav-link{position:relative;}
   .nav-link::after{content:'';position:absolute;left:0;bottom:-4px;width:0;height:2px;background:linear-gradient(90deg,#ff6a00,#ffb347);transition:width .3s;}
   .nav-link:hover::after{width:100%;}
 
-  /* --- Button shine --- */
   .btn-primary{position:relative;overflow:hidden;background:linear-gradient(135deg,#ff6a00,#ff8c33);transition:transform .3s, box-shadow .3s;}
   .btn-primary::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.3),transparent);transition:left .6s;}
   .btn-primary:hover{transform:translateY(-2px);box-shadow:0 20px 40px -10px rgba(255,106,0,.5);}
   .btn-primary:hover::before{left:100%;}
 
-  /* --- Progress bar --- */
-  .scroll-progress{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,#ff6a00,#ffb347);z-index:9999;width:0;transition:width .1s;}
+  .scroll-progress{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,#ff6a00,#ffb347);z-index:9999;width:0;}
 
-  /* --- Section numbering --- */
   .section-num{font-family:'Space Grotesk',sans-serif;font-size:120px;font-weight:700;background:linear-gradient(180deg,rgba(255,106,0,.15),transparent);-webkit-background-clip:text;background-clip:text;color:transparent;line-height:1;pointer-events:none;}
 
-  /* --- Driver layer card hover --- */
   .layer-card{transition:all .4s;border-left:2px solid transparent;}
   .layer-card:hover{border-left-color:#ff6a00;background:rgba(255,106,0,.08);transform:translateX(8px);}
   .layer-card:hover .layer-num{background:#ff6a00;color:#fff;}
   .layer-num{transition:all .4s;}
 
-  /* --- Mobile menu --- */
   .mobile-menu{transform:translateX(100%);transition:transform .4s cubic-bezier(.4,0,.2,1);}
   .mobile-menu.open{transform:translateX(0);}
 
-  /* --- Noise overlay --- */
   .noise::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:1;opacity:.03;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence baseFrequency='0.9'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");}
 
-  /* ==========================================================
-     HERO CAROUSEL — Android recent-apps style (FASTER)
-     ========================================================== */
+  /* ===== HERO CAROUSEL (FAST) ===== */
   .hero-stage{
-    position:relative;
-    width:100%;
-    aspect-ratio: 1 / 1;
-    max-height:620px;
-    overflow:hidden;
-    border-radius:32px;
-    user-select:none;
-    touch-action:pan-y;
+    position:relative;width:100%;aspect-ratio:1/1;max-height:620px;
+    overflow:hidden;border-radius:32px;user-select:none;touch-action:pan-y;
   }
   .hero-slide{
-    position:absolute; inset:0;
-    display:flex;align-items:center;justify-content:center;
-    padding:3rem;
+    position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:2.5rem;
     opacity:0;
-    transform: translateX(100%) scale(.9) rotateY(-15deg);
-    /* Transition cut in half for faster, snappier feel */
-    transition: transform .45s cubic-bezier(.22,1,.36,1), opacity .35s ease, filter .35s ease;
-    filter: blur(10px);
-    will-change: transform, opacity;
+    transform:translateX(80%) scale(.92);
+    transition:transform .4s cubic-bezier(.22,1,.36,1), opacity .3s ease;
+    will-change:transform,opacity;pointer-events:none;
   }
-  .hero-slide.active{
-    opacity:1;
-    transform: translateX(0) scale(1) rotateY(0);
-    filter: blur(0);
-    z-index:2;
-  }
-  .hero-slide.prev{
-    opacity:0;
-    transform: translateX(-100%) scale(.9) rotateY(15deg);
-    filter: blur(10px);
-  }
+  .hero-slide.active{opacity:1;transform:translateX(0) scale(1);z-index:2;pointer-events:auto;}
+  .hero-slide.prev{opacity:0;transform:translateX(-80%) scale(.92);}
   .hero-slide img{
-    max-width:95%; max-height:95%;
-    object-fit:contain;
-    filter: drop-shadow(0 40px 60px rgba(255,106,0,.25)) drop-shadow(0 15px 25px rgba(0,0,0,.5));
-    animation: slideFloat 5s ease-in-out infinite;
+    max-width:92%;max-height:92%;object-fit:contain;
+    filter:drop-shadow(0 30px 50px rgba(255,106,0,.22)) drop-shadow(0 10px 20px rgba(0,0,0,.45));
+    animation:slideFloat 5s ease-in-out infinite;
   }
-  @keyframes slideFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-15px);}}
+  @keyframes slideFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-12px);}}
 
-  /* Big gradient glow behind active slide */
   .hero-stage::before{
-    content:'';position:absolute;inset:10%;
-    background: radial-gradient(circle, rgba(255,106,0,.35), transparent 60%);
-    filter: blur(60px); z-index:1; pointer-events:none;
-    animation: pulse 4s ease-in-out infinite;
+    content:'';position:absolute;inset:12%;
+    background:radial-gradient(circle,rgba(255,106,0,.32),transparent 60%);
+    filter:blur(55px);z-index:1;pointer-events:none;
   }
-  @keyframes pulse{0%,100%{opacity:.7;}50%{opacity:1;}}
-
-  /* Thumbnails */
-  .thumb-list{
-    display:flex;flex-direction:column;gap:.75rem;
-    max-height:620px;overflow-y:auto;padding-right:.5rem;
-    scrollbar-width:thin;scrollbar-color:#ff6a00 transparent;
-  }
-  .thumb-list::-webkit-scrollbar{width:4px;}
-  .thumb-list::-webkit-scrollbar-thumb{background:#ff6a00;border-radius:4px;}
 
   .thumb{
-    position:relative;
-    flex:0 0 auto;
-    width:100%;
-    aspect-ratio: 1 / 1;
-    border-radius:16px;
-    overflow:hidden;
-    cursor:pointer;
-    border:2px solid rgba(255,255,255,.06);
-    background: rgba(20,20,28,.5);
-    /* Transition speed increased */
-    transition: all .25s cubic-bezier(.22,1,.36,1);
+    position:relative;aspect-ratio:1/1;border-radius:14px;overflow:hidden;cursor:pointer;
+    border:2px solid rgba(255,255,255,.06);background:rgba(20,20,28,.5);
+    transition:all .25s cubic-bezier(.22,1,.36,1);
   }
-  .thumb img{
-    width:100%;height:100%;object-fit:cover;
-    transition: transform .3s ease, filter .3s;
-    filter: grayscale(40%) brightness(.75);
-  }
-  .thumb:hover{ transform:translateX(6px); border-color:rgba(255,106,0,.5); }
-  .thumb:hover img{ filter: grayscale(0) brightness(1); transform:scale(1.08); }
+  .thumb img{width:100%;height:100%;object-fit:cover;transition:transform .3s,filter .3s;filter:grayscale(35%) brightness(.78);}
+  .thumb:hover{border-color:rgba(255,106,0,.45);transform:translateY(-2px);}
+  .thumb:hover img{filter:none;transform:scale(1.06);}
   .thumb.active{
-    border-color: #ff6a00;
-    box-shadow: 0 0 0 1px #ff6a00, 0 15px 40px -10px rgba(255,106,0,.6);
-    transform: translateX(10px) scale(1.03);
+    border-color:#ff6a00;
+    box-shadow:0 0 0 1px #ff6a00, 0 12px 28px -8px rgba(255,106,0,.55);
   }
-  .thumb.active img{ filter:none; }
-  .thumb.active::before{
-    content:''; position:absolute; left:0; top:0; bottom:0; width:3px;
-    background: linear-gradient(180deg,#ff6a00,#ffb347); z-index:2;
-  }
-
-  /* Progress bar on active thumb */
+  .thumb.active img{filter:none;}
   .thumb .progress{
-    position:absolute; left:0; right:0; bottom:0; height:3px; z-index:3;
-    background: linear-gradient(90deg,#ff6a00,#ffb347);
-    width:0%;
+    position:absolute;left:0;right:0;bottom:0;height:3px;z-index:3;
+    background:linear-gradient(90deg,#ff6a00,#ffb347);width:0%;
   }
-  .thumb.active .progress{ animation: thumbProgress 5s linear forwards; }
+  .thumb.active .progress{animation:thumbProgress 4.5s linear forwards;}
   @keyframes thumbProgress{from{width:0%;}to{width:100%;}}
 
-  /* Carousel controls */
   .carousel-ctrl{
-    position:absolute; top:50%; transform:translateY(-50%);
-    width:48px;height:48px;border-radius:9999px;
-    background: rgba(14,14,20,.7);backdrop-filter:blur(10px);
-    border:1px solid rgba(255,106,0,.3); color:#fff;
+    position:absolute;top:50%;transform:translateY(-50%);
+    width:44px;height:44px;border-radius:9999px;
+    background:rgba(14,14,20,.75);backdrop-filter:blur(10px);
+    border:1px solid rgba(255,106,0,.3);color:#fff;
     display:flex;align-items:center;justify-content:center;
-    cursor:pointer; z-index:5; transition:all .3s;
-    opacity:0;
+    cursor:pointer;z-index:5;transition:all .25s;opacity:0;
   }
-  .hero-stage:hover .carousel-ctrl{ opacity:1; }
-  .carousel-ctrl:hover{ background:#ff6a00; transform:translateY(-50%) scale(1.1); }
-  .ctrl-prev{left:16px;}
-  .ctrl-next{right:16px;}
+  .hero-stage:hover .carousel-ctrl{opacity:1;}
+  .carousel-ctrl:hover{background:#ff6a00;transform:translateY(-50%) scale(1.08);}
+  .ctrl-prev{left:12px;} .ctrl-next{right:12px;}
 
-  /* Variant badge */
   .variant-badge{
-    position:absolute;top:20px;left:20px;z-index:4;
-    padding:6px 14px;border-radius:9999px;
-    background:rgba(14,14,20,.8);backdrop-filter:blur(10px);
+    position:absolute;top:16px;left:16px;z-index:4;
+    padding:5px 12px;border-radius:9999px;
+    background:rgba(14,14,20,.85);backdrop-filter:blur(10px);
     border:1px solid rgba(255,106,0,.3);
-    font-size:11px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;
-    color:#ff6a00;
-    opacity:0;transform:translateY(-10px);
-    transition: all .35s .2s;
+    font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#ff6a00;
+    opacity:0;transform:translateY(-8px);transition:all .3s .15s;
   }
-  .hero-slide.active .variant-badge{ opacity:1; transform:translateY(0); }
+  .hero-slide.active .variant-badge{opacity:1;transform:translateY(0);}
 
-  /* Dot indicators */
-  .dot-indicators{
-    position:absolute;bottom:16px;left:50%;transform:translateX(-50%);
-    display:flex;gap:8px;z-index:4;
-  }
-  .dot{
-    width:8px;height:8px;border-radius:9999px;background:rgba(255,255,255,.25);
-    cursor:pointer;transition:all .3s;
-  }
-  .dot.active{background:#ff6a00;width:28px;}
+  .dot-indicators{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);display:flex;gap:7px;z-index:4;}
+  .dot{width:7px;height:7px;border-radius:9999px;background:rgba(255,255,255,.25);cursor:pointer;transition:all .25s;}
+  .dot.active{background:#ff6a00;width:24px;}
 
-  /* ==========================================================
-     LIFESTYLE SECTION
-     ========================================================== */
-  .lifestyle-img{
-    transition: all .8s cubic-bezier(.22,1,.36,1);
-  }
-  .lifestyle-wrap:hover .lifestyle-img{ transform:scale(1.03); }
+  .lifestyle-img{transition:transform .7s cubic-bezier(.22,1,.36,1);}
+  .lifestyle-wrap:hover .lifestyle-img{transform:scale(1.03);}
 
-  /* ==========================================================
-     GALLERY LIGHTBOX
-     ========================================================== */
   .lightbox{position:fixed;inset:0;background:rgba(0,0,0,.95);z-index:100;display:none;align-items:center;justify-content:center;padding:2rem;}
-  .lightbox.active{display:flex;animation:fadeIn .3s;}
+  .lightbox.active{display:flex;animation:fadeIn .25s;}
   @keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
   .lightbox img{max-width:90%;max-height:85vh;border-radius:12px;}
+
+  /* prevent scroll anchoring jumps */
+  body{overflow-anchor:none;}
+  #showcase, #heroStage, #thumbList{overflow-anchor:none;}
 </style>
 </head>
-<body class="antialiased selection:bg-orange-500 selection:text-white overflow-x-hidden noise">
+<body class="antialiased selection:bg-orange-500 selection:text-white noise">
 
-<!-- Custom cursor -->
 <div class="cursor-ring"></div>
 <div class="cursor-dot"></div>
-
-<!-- Scroll progress -->
 <div class="scroll-progress" id="progress"></div>
-
-<!-- Animated background -->
 <div class="grid-bg"></div>
 <div class="orb orb-1"></div>
 <div class="orb orb-2"></div>
 
-<!-- ============== NAV ============== -->
+<!-- NAV -->
 <nav class="fixed top-0 w-full z-50 glass-strong">
   <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-    <a href="#" onclick="window.scrollTo(0,0); return false;" class="flex items-center gap-2">
+    <a href="#showcase" class="flex items-center gap-2">
       <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-orange-500 to-amber-500 flex items-center justify-center font-black text-white">M</div>
       <div class="leading-tight">
         <div class="text-[10px] font-bold tracking-[0.25em] text-zinc-500 uppercase">Crossbeats</div>
@@ -279,14 +187,13 @@
     </div>
     <div class="flex items-center gap-3">
       <a href="#buy" class="hidden md:inline-block btn-primary text-white text-sm font-bold px-6 py-2.5 rounded-full">Pre-Order</a>
-      <button id="menuBtn" class="lg:hidden text-white text-2xl">☰</button>
+      <button id="menuBtn" class="lg:hidden text-white text-2xl" type="button">☰</button>
     </div>
   </div>
 </nav>
 
-<!-- Mobile menu -->
 <div id="mobileMenu" class="mobile-menu fixed top-0 right-0 h-full w-72 glass-strong z-50 p-8 pt-24 lg:hidden">
-  <button id="closeBtn" class="absolute top-6 right-6 text-2xl text-white">✕</button>
+  <button id="closeBtn" class="absolute top-6 right-6 text-2xl text-white" type="button">✕</button>
   <nav class="flex flex-col gap-6 text-lg font-semibold">
     <a href="#showcase" class="menu-link">Showcase</a>
     <a href="#lifestyle" class="menu-link">Lifestyle</a>
@@ -297,13 +204,11 @@
   </nav>
 </div>
 
-<!-- ============== HERO + SHOWCASE CAROUSEL ============== -->
+<!-- HERO -->
 <section id="showcase" class="relative min-h-screen flex items-center pt-28 pb-16 px-6">
   <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center w-full">
 
-    <!-- LEFT: Title + Thumbnails -->
     <div class="lg:col-span-5 space-y-7 order-2 lg:order-1" data-aos="fade-right">
-
       <div class="inline-flex items-center gap-2 py-2 px-4 rounded-full glass text-orange-400 text-xs font-bold uppercase tracking-widest">
         <span class="relative flex h-2 w-2">
           <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
@@ -313,24 +218,22 @@
       </div>
 
       <h1 class="font-display text-4xl sm:text-6xl font-black leading-[0.95]">
-        Open Ear.<br>
-        <span class="text-gradient">Infinite Sound.</span>
+        Open Ear.<br><span class="text-gradient">Infinite Sound.</span>
       </h1>
 
       <p class="text-zinc-400 text-base md:text-lg max-w-xl leading-relaxed">
-        <strong class="text-white">Crossbeats Muse</strong> — featherlight open-ear earbuds with <strong class="text-orange-400">Bluetooth 6.0</strong>, a <strong class="text-orange-400">5-layer driver</strong>, and <strong class="text-orange-400">40-hour</strong> playtime.
+        <strong class="text-white">Crossbeats Muse</strong> — featherlight open-ear earbuds with
+        <strong class="text-orange-400">Bluetooth 6.0</strong>, a
+        <strong class="text-orange-400">5-layer driver</strong>, and
+        <strong class="text-orange-400">40-hour</strong> playtime.
       </p>
 
-      <!-- Thumbnail product switcher -->
       <div>
         <div class="flex items-center justify-between mb-3">
           <span class="text-xs font-bold text-zinc-500 uppercase tracking-widest">Explore the Product</span>
-          <span class="text-xs text-zinc-500"><span id="currentSlide">1</span> / <span id="totalSlides">10</span></span>
+          <span class="text-xs text-zinc-500"><span id="currentSlide">1</span> / <span id="totalSlides">9</span></span>
         </div>
-
-        <div class="grid grid-cols-5 lg:grid-cols-3 gap-2.5" id="thumbList">
-          <!-- Thumbnails injected by JS -->
-        </div>
+        <div class="grid grid-cols-5 lg:grid-cols-3 gap-2.5" id="thumbList"></div>
       </div>
 
       <div class="pt-2 grid grid-cols-3 gap-4 border-t border-white/10 max-w-lg">
@@ -340,36 +243,27 @@
       </div>
     </div>
 
-    <!-- RIGHT: Main carousel stage -->
-    <div class="lg:col-span-7 order-1 lg:order-2" data-aos="fade-left" data-aos-delay="200">
+    <div class="lg:col-span-7 order-1 lg:order-2" data-aos="fade-left" data-aos-delay="150">
       <div class="gradient-border rounded-[36px] p-2">
         <div class="hero-stage glass" id="heroStage">
-          <!-- Slides injected by JS -->
-
-          <button class="carousel-ctrl ctrl-prev" id="prevBtn" aria-label="Previous">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+          <button class="carousel-ctrl ctrl-prev" id="prevBtn" type="button" aria-label="Previous">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
           </button>
-          <button class="carousel-ctrl ctrl-next" id="nextBtn" aria-label="Next">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+          <button class="carousel-ctrl ctrl-next" id="nextBtn" type="button" aria-label="Next">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
           </button>
-
           <div class="dot-indicators" id="dotIndicators"></div>
         </div>
       </div>
-
-      <!-- CTAs under carousel -->
       <div class="flex flex-wrap gap-4 justify-center mt-6">
-        <a href="#acoustics" class="btn-primary text-white font-bold px-8 py-3.5 rounded-full inline-flex items-center gap-2">
-          Explore Technology <span>→</span>
-        </a>
+        <a href="#acoustics" class="btn-primary text-white font-bold px-8 py-3.5 rounded-full inline-flex items-center gap-2">Explore Technology <span>→</span></a>
         <a href="#fit" class="glass hover:bg-white/5 text-white font-semibold px-8 py-3.5 rounded-full transition">How to Wear</a>
       </div>
     </div>
-
   </div>
 </section>
 
-<!-- ============== MARQUEE ============== -->
+<!-- MARQUEE -->
 <div class="marquee py-6 border-y border-white/10 glass">
   <div class="marquee-track whitespace-nowrap text-2xl font-display font-bold text-zinc-500">
     <span>OPEN EAR DESIGN</span><span class="text-orange-500">●</span>
@@ -377,156 +271,113 @@
     <span>40 HOUR BATTERY</span><span class="text-orange-500">●</span>
     <span>CRYSTAL CLEAR CALLS</span><span class="text-orange-500">●</span>
     <span>5-LAYER DRIVER</span><span class="text-orange-500">●</span>
-    <span>IP RATED SWEAT PROOF</span><span class="text-orange-500">●</span>
+    <span>SECURE FIT HOOK</span><span class="text-orange-500">●</span>
     <span>OPEN EAR DESIGN</span><span class="text-orange-500">●</span>
     <span>BLUETOOTH 6.0</span><span class="text-orange-500">●</span>
     <span>40 HOUR BATTERY</span><span class="text-orange-500">●</span>
     <span>CRYSTAL CLEAR CALLS</span><span class="text-orange-500">●</span>
     <span>5-LAYER DRIVER</span><span class="text-orange-500">●</span>
-    <span>IP RATED SWEAT PROOF</span><span class="text-orange-500">●</span>
+    <span>SECURE FIT HOOK</span><span class="text-orange-500">●</span>
   </div>
 </div>
 
-<!-- ============== LIFESTYLE SECTION ============== -->
+<!-- LIFESTYLE -->
 <section id="lifestyle" class="relative py-28 px-6 max-w-7xl mx-auto">
   <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
     <div class="lg:col-span-5 space-y-6" data-aos="fade-right">
       <span class="text-orange-500 text-xs font-bold uppercase tracking-widest">A Lifestyle Statement</span>
       <h2 class="font-display text-4xl md:text-6xl font-black">More than audio. <span class="text-gradient">A Lifestyle.</span></h2>
       <p class="text-zinc-400 text-lg leading-relaxed">
-        Designed for the way you live — from morning commutes and intense workouts to late-night calls and weekend adventures. Muse OWS blends into your day with featherweight comfort and a signature look.
+        Designed for the way you live — from morning commutes and intense workouts to late-night calls and weekend adventures.
       </p>
       <div class="grid grid-cols-2 gap-4 pt-4">
-        <div class="glass p-5 rounded-2xl">
-          <div class="text-2xl mb-2">🏃</div>
-          <h4 class="font-bold text-white mb-1">Active Life</h4>
-          <p class="text-xs text-zinc-500">Workouts, runs, sports</p>
-        </div>
-        <div class="glass p-5 rounded-2xl">
-          <div class="text-2xl mb-2">💼</div>
-          <h4 class="font-bold text-white mb-1">Work Mode</h4>
-          <p class="text-xs text-zinc-500">Calls, meetings, focus</p>
-        </div>
-        <div class="glass p-5 rounded-2xl">
-          <div class="text-2xl mb-2">🎵</div>
-          <h4 class="font-bold text-white mb-1">Daily Jam</h4>
-          <p class="text-xs text-zinc-500">Commute, chill, repeat</p>
-        </div>
-        <div class="glass p-5 rounded-2xl">
-          <div class="text-2xl mb-2">✈️</div>
-          <h4 class="font-bold text-white mb-1">Travel Ready</h4>
-          <p class="text-xs text-zinc-500">Snap charge, 40h battery</p>
-        </div>
+        <div class="glass p-5 rounded-2xl"><div class="text-2xl mb-2">🏃</div><h4 class="font-bold text-white mb-1">Active Life</h4><p class="text-xs text-zinc-500">Workouts, runs, sports</p></div>
+        <div class="glass p-5 rounded-2xl"><div class="text-2xl mb-2">💼</div><h4 class="font-bold text-white mb-1">Work Mode</h4><p class="text-xs text-zinc-500">Calls, meetings, focus</p></div>
+        <div class="glass p-5 rounded-2xl"><div class="text-2xl mb-2">🎵</div><h4 class="font-bold text-white mb-1">Daily Jam</h4><p class="text-xs text-zinc-500">Commute, chill, repeat</p></div>
+        <div class="glass p-5 rounded-2xl"><div class="text-2xl mb-2">✈️</div><h4 class="font-bold text-white mb-1">Travel Ready</h4><p class="text-xs text-zinc-500">Snap charge, 40h battery</p></div>
       </div>
     </div>
     <div class="lg:col-span-7 lifestyle-wrap overflow-hidden rounded-3xl gradient-border p-2" data-aos="fade-left">
-      <!-- Fixed Lifestyle Image with strong fallbacks -->
-      <img src="lifestyle.png" data-fallback="Lifestyle.png,lifestyle.PNG,lifestyle .png" alt="Crossbeats Muse Lifestyle" class="smart-img lifestyle-img w-full rounded-2xl">
+      <img data-src="lifestyle.png" alt="Crossbeats Muse Lifestyle" class="smart-img lifestyle-img w-full rounded-2xl">
     </div>
   </div>
 </section>
 
-<!-- ============== ACOUSTICS ============== -->
+<!-- ACOUSTICS -->
 <section id="acoustics" class="relative py-28 px-6 max-w-7xl mx-auto">
   <div class="absolute right-0 top-10 section-num hidden md:block">01</div>
-
   <div class="max-w-2xl mb-16" data-aos="fade-up">
     <span class="text-orange-500 text-xs font-bold uppercase tracking-widest">Internal Architecture</span>
     <h2 class="font-display text-4xl md:text-6xl font-black mt-3">5-Stage <span class="text-gradient">Acoustic Stack</span></h2>
-    <p class="text-zinc-400 mt-4 text-lg">Custom-engineered multi-layer driver delivering studio-grade clarity, deep bass resonance, and open-ear directional precision.</p>
+    <p class="text-zinc-400 mt-4 text-lg">Custom-engineered multi-layer driver delivering studio-grade clarity and open-ear directional precision.</p>
   </div>
-
   <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
     <div class="lg:col-span-7" data-aos="zoom-in">
       <div class="gradient-border rounded-3xl p-2">
-        <img src="driver.png" alt="Driver Architecture" class="smart-img w-full rounded-2xl">
+        <img data-src="driver.png" alt="Driver Architecture" class="smart-img w-full rounded-2xl">
       </div>
     </div>
     <div class="lg:col-span-5 space-y-3" data-aos="fade-left">
-      <div class="layer-card p-5 rounded-2xl glass flex items-start gap-4">
-        <div class="layer-num w-10 h-10 rounded-full bg-white/5 flex items-center justify-center font-bold text-orange-400 shrink-0">01</div>
-        <div><h4 class="font-bold text-white">Acoustic Dome</h4><p class="text-sm text-zinc-400 mt-1">Precision-moulded grille channels sound directly into the ear canal.</p></div>
-      </div>
-      <div class="layer-card p-5 rounded-2xl glass flex items-start gap-4">
-        <div class="layer-num w-10 h-10 rounded-full bg-white/5 flex items-center justify-center font-bold text-orange-400 shrink-0">02</div>
-        <div><h4 class="font-bold text-white">Sensitivity Diaphragm</h4><p class="text-sm text-zinc-400 mt-1">Composite membrane delivers crisp trebles with rich midrange.</p></div>
-      </div>
-      <div class="layer-card p-5 rounded-2xl glass flex items-start gap-4">
-        <div class="layer-num w-10 h-10 rounded-full bg-white/5 flex items-center justify-center font-bold text-orange-400 shrink-0">03</div>
-        <div><h4 class="font-bold text-white">Voice Coil</h4><p class="text-sm text-zinc-400 mt-1">Copper-clad lightweight coil for zero distortion transients.</p></div>
-      </div>
-      <div class="layer-card p-5 rounded-2xl glass flex items-start gap-4">
-        <div class="layer-num w-10 h-10 rounded-full bg-white/5 flex items-center justify-center font-bold text-orange-400 shrink-0">04</div>
-        <div><h4 class="font-bold text-white">Neodymium Magnet</h4><p class="text-sm text-zinc-400 mt-1">High-flux magnetic ring producing powerful low-frequency punch.</p></div>
-      </div>
-      <div class="layer-card p-5 rounded-2xl glass flex items-start gap-4">
-        <div class="layer-num w-10 h-10 rounded-full bg-white/5 flex items-center justify-center font-bold text-orange-400 shrink-0">05</div>
-        <div><h4 class="font-bold text-white">Resonance Chamber</h4><p class="text-sm text-zinc-400 mt-1">Sealed cavity balances pressure for warm, full-bodied sound.</p></div>
-      </div>
+      <div class="layer-card p-5 rounded-2xl glass flex items-start gap-4"><div class="layer-num w-10 h-10 rounded-full bg-white/5 flex items-center justify-center font-bold text-orange-400 shrink-0">01</div><div><h4 class="font-bold text-white">Acoustic Dome</h4><p class="text-sm text-zinc-400 mt-1">Precision-moulded grille channels sound into the ear canal.</p></div></div>
+      <div class="layer-card p-5 rounded-2xl glass flex items-start gap-4"><div class="layer-num w-10 h-10 rounded-full bg-white/5 flex items-center justify-center font-bold text-orange-400 shrink-0">02</div><div><h4 class="font-bold text-white">Sensitivity Diaphragm</h4><p class="text-sm text-zinc-400 mt-1">Composite membrane for crisp trebles and rich mids.</p></div></div>
+      <div class="layer-card p-5 rounded-2xl glass flex items-start gap-4"><div class="layer-num w-10 h-10 rounded-full bg-white/5 flex items-center justify-center font-bold text-orange-400 shrink-0">03</div><div><h4 class="font-bold text-white">Voice Coil</h4><p class="text-sm text-zinc-400 mt-1">Copper-clad lightweight coil, zero distortion.</p></div></div>
+      <div class="layer-card p-5 rounded-2xl glass flex items-start gap-4"><div class="layer-num w-10 h-10 rounded-full bg-white/5 flex items-center justify-center font-bold text-orange-400 shrink-0">04</div><div><h4 class="font-bold text-white">Neodymium Magnet</h4><p class="text-sm text-zinc-400 mt-1">High-flux ring for powerful bass punch.</p></div></div>
+      <div class="layer-card p-5 rounded-2xl glass flex items-start gap-4"><div class="layer-num w-10 h-10 rounded-full bg-white/5 flex items-center justify-center font-bold text-orange-400 shrink-0">05</div><div><h4 class="font-bold text-white">Resonance Chamber</h4><p class="text-sm text-zinc-400 mt-1">Sealed cavity for warm, full-bodied sound.</p></div></div>
     </div>
   </div>
 </section>
 
-<!-- ============== PERFORMANCE BENTO ============== -->
+<!-- PERFORMANCE -->
 <section id="performance" class="relative py-28 px-6 max-w-7xl mx-auto">
   <div class="absolute left-0 top-10 section-num hidden md:block">02</div>
-
   <div class="max-w-2xl mb-16" data-aos="fade-up">
     <span class="text-orange-500 text-xs font-bold uppercase tracking-widest">Performance Specs</span>
     <h2 class="font-display text-4xl md:text-6xl font-black mt-3">Built for <span class="text-gradient">Every Beat.</span></h2>
   </div>
-
   <div class="grid grid-cols-1 md:grid-cols-6 gap-6">
-
     <div class="md:col-span-3 glass rounded-3xl p-8 card-hover" data-aos="fade-up">
       <span class="text-xs font-bold text-orange-400 uppercase tracking-wider">Flagship Silicon</span>
       <h3 class="font-display text-3xl font-black mt-2 mb-3">Bluetooth 6.0</h3>
       <p class="text-zinc-400 text-sm mb-6">Smarter power use, stable connection, ultra-low audio lag for gaming and video.</p>
-      <!-- Fixed Bluetooth Image by URL encoding the space (%20) directly into the src -->
-      <img src="bluetooth%20.png" data-fallback="bluetooth.png,Bluetooth.png,bluetooth .png" alt="BT 6.0" class="smart-img w-full rounded-2xl">
+      <!-- EXACT filename with space encoded -->
+      <img data-src="bluetooth .png" alt="Bluetooth 6.0" class="smart-img w-full rounded-2xl">
     </div>
-
-    <div class="md:col-span-3 glass rounded-3xl p-8 card-hover" data-aos="fade-up" data-aos-delay="100">
+    <div class="md:col-span-3 glass rounded-3xl p-8 card-hover" data-aos="fade-up" data-aos-delay="80">
       <span class="text-xs font-bold text-green-400 uppercase tracking-wider">Power That Lasts</span>
       <h3 class="font-display text-3xl font-black mt-2 mb-3">40H Playtime</h3>
-      <p class="text-zinc-400 text-sm mb-6">Days without charging. Type-C snap charge for quick top-ups on the go.</p>
-      <img src="battery.png" alt="40H Battery" class="smart-img w-full rounded-2xl">
+      <p class="text-zinc-400 text-sm mb-6">Days without charging. Type-C snap charge for quick top-ups.</p>
+      <img data-src="battery.png" alt="40H Battery" class="smart-img w-full rounded-2xl">
     </div>
-
     <div class="md:col-span-6 glass rounded-3xl p-8 md:p-12 card-hover grid grid-cols-1 lg:grid-cols-2 gap-8 items-center" data-aos="fade-up">
       <div class="space-y-5">
         <span class="text-xs font-bold text-orange-400 uppercase tracking-wider">Pristine Craftsmanship</span>
         <h3 class="font-display text-3xl md:text-4xl font-black">Dual-Resistant Premium Case</h3>
-        <p class="text-zinc-400">Refined matte finish repels daily wear — keeping your charging case looking fresh out of the box.</p>
+        <p class="text-zinc-400">Refined matte finish repels daily wear — keeps your case looking fresh.</p>
         <ul class="space-y-3 pt-2">
-          <li class="flex items-center gap-3"><span class="w-6 h-6 rounded-full bg-orange-500/20 flex items-center justify-center text-orange-400 text-xs">✓</span><span><strong>Fingerprint Resistant</strong> — no oil smudges</span></li>
-          <li class="flex items-center gap-3"><span class="w-6 h-6 rounded-full bg-orange-500/20 flex items-center justify-center text-orange-400 text-xs">✓</span><span><strong>Scratch Resistant</strong> — pocket-ready durability</span></li>
-          <li class="flex items-center gap-3"><span class="w-6 h-6 rounded-full bg-orange-500/20 flex items-center justify-center text-orange-400 text-xs">✓</span><span><strong>Cobble Ergonomics</strong> — one-hand flip</span></li>
+          <li class="flex items-center gap-3"><span class="w-6 h-6 rounded-full bg-orange-500/20 flex items-center justify-center text-orange-400 text-xs">✓</span><span><strong>Fingerprint Resistant</strong></span></li>
+          <li class="flex items-center gap-3"><span class="w-6 h-6 rounded-full bg-orange-500/20 flex items-center justify-center text-orange-400 text-xs">✓</span><span><strong>Scratch Resistant</strong></span></li>
+          <li class="flex items-center gap-3"><span class="w-6 h-6 rounded-full bg-orange-500/20 flex items-center justify-center text-orange-400 text-xs">✓</span><span><strong>One-hand flip ergonomics</strong></span></li>
         </ul>
       </div>
-      <div><img src="premium-case.png" alt="Premium Case" class="smart-img w-full rounded-2xl"></div>
+      <div><img data-src="premium-case.png" alt="Premium Case" class="smart-img w-full rounded-2xl"></div>
     </div>
-
   </div>
 </section>
 
-<!-- ============== FIT ============== -->
+<!-- FIT -->
 <section id="fit" class="relative py-28 px-6 max-w-7xl mx-auto">
   <div class="absolute right-0 top-10 section-num hidden md:block">03</div>
-
   <div class="max-w-2xl mb-16" data-aos="fade-up">
     <span class="text-orange-500 text-xs font-bold uppercase tracking-widest">Ergonomic Hook</span>
     <h2 class="font-display text-4xl md:text-6xl font-black mt-3">Locks In. <span class="text-gradient">Never Falls.</span></h2>
   </div>
-
   <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
     <div class="glass rounded-3xl p-8 card-hover" data-aos="fade-right">
       <span class="text-xs font-bold text-orange-400 uppercase tracking-wider">Sports Ready</span>
       <h3 class="font-display text-2xl font-bold mt-2 mb-3">Secure Through Every Move</h3>
-      <p class="text-zinc-400 text-sm mb-6">Tested for workouts, court sports and outdoor sprints — the flexible memory hook contours your ear.</p>
-      <img src="secure-fit.png" alt="Secure Fit" class="smart-img w-full rounded-2xl">
+      <p class="text-zinc-400 text-sm mb-6">Flexible memory hook contours your ear — tested for workouts and sprints.</p>
+      <img data-src="secure-fit.png" alt="Secure Fit" class="smart-img w-full rounded-2xl">
     </div>
-
     <div class="glass rounded-3xl p-8 card-hover" data-aos="fade-left">
       <span class="text-xs font-bold text-orange-400 uppercase tracking-wider">Quick Guide</span>
       <h3 class="font-display text-2xl font-bold mt-2 mb-3">Wear in 3 Simple Steps</h3>
@@ -535,251 +386,290 @@
         <p class="flex gap-3"><span class="font-bold text-orange-400">02</span> Guide the orange hook around ear rim</p>
         <p class="flex gap-3"><span class="font-bold text-orange-400">03</span> Centre until it feels secure</p>
       </div>
-      <img src="how-to-wear.png" alt="How to Wear" class="smart-img w-full rounded-2xl">
+      <img data-src="how-to-wear.png" alt="How to Wear" class="smart-img w-full rounded-2xl">
     </div>
   </div>
 </section>
 
-<!-- Lightbox -->
-<div class="lightbox" id="lightbox"><img id="lightboxImg" src=""><button class="absolute top-6 right-6 text-white text-3xl" onclick="closeLightbox()">✕</button></div>
+<div class="lightbox" id="lightbox">
+  <img id="lightboxImg" src="" alt="">
+  <button class="absolute top-6 right-6 text-white text-3xl" type="button" id="closeLightboxBtn">✕</button>
+</div>
 
-<!-- ============== CTA ============== -->
 <section id="buy" class="relative py-28 px-6">
   <div class="max-w-4xl mx-auto text-center space-y-8 glass-strong rounded-[40px] p-12 md:p-20" data-aos="zoom-in">
     <span class="text-orange-500 text-xs font-bold uppercase tracking-widest">Launching Soon</span>
     <h2 class="font-display text-4xl md:text-7xl font-black">Ready to go <span class="text-gradient">Open?</span></h2>
-    <p class="text-zinc-400 text-lg max-w-xl mx-auto">Available in Carbon Black & Frost White with signature orange ergonomic hook.</p>
+    <p class="text-zinc-400 text-lg max-w-xl mx-auto">Available in Carbon Black &amp; Frost White with signature orange ergonomic hook.</p>
     <div class="flex flex-wrap gap-4 justify-center pt-4">
-      <a href="https://crossbeats.com" target="_blank" class="btn-primary text-white font-bold px-10 py-4 rounded-full">Shop Crossbeats Muse</a>
-      <a href="#" class="glass hover:bg-white/5 text-white font-semibold px-10 py-4 rounded-full transition">Notify Me</a>
+      <a href="https://crossbeats.com" target="_blank" rel="noopener" class="btn-primary text-white font-bold px-10 py-4 rounded-full">Shop Crossbeats Muse</a>
+      <a href="#showcase" class="glass hover:bg-white/5 text-white font-semibold px-10 py-4 rounded-full transition">Back to Top</a>
     </div>
   </div>
 </section>
 
 <footer class="py-10 px-6 border-t border-white/10 text-center text-xs text-zinc-600">
-  © 2026 Crossbeats. All Rights Reserved. · Designed with precision.
+  © 2026 Crossbeats. All Rights Reserved.
 </footer>
 
-<!-- Scripts -->
 <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
 <script>
-  AOS.init({ duration:900, easing:'ease-out-cubic', once:true, offset:80 });
+(function(){
+  'use strict';
 
-  /* ============== CUSTOM CURSOR ============== */
+  AOS.init({ duration:800, easing:'ease-out-cubic', once:true, offset:60 });
+
+  /* ---------- cursor ---------- */
   const dot = document.querySelector('.cursor-dot');
   const ring = document.querySelector('.cursor-ring');
-  document.addEventListener('mousemove', e=>{
-    dot.style.left = e.clientX+'px'; dot.style.top = e.clientY+'px';
-    ring.style.left = e.clientX+'px'; ring.style.top = e.clientY+'px';
-  });
+  if (window.matchMedia('(min-width:769px)').matches) {
+    document.addEventListener('mousemove', e => {
+      dot.style.left = e.clientX + 'px';
+      dot.style.top  = e.clientY + 'px';
+      ring.style.left = e.clientX + 'px';
+      ring.style.top  = e.clientY + 'px';
+    });
+  }
 
-  /* ============== SCROLL PROGRESS ============== */
-  window.addEventListener('scroll',()=>{
+  /* ---------- scroll progress (read-only, no scroll writes) ---------- */
+  window.addEventListener('scroll', () => {
     const h = document.documentElement;
     const p = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
-    document.getElementById('progress').style.width = p+'%';
-  });
+    document.getElementById('progress').style.width = p + '%';
+  }, { passive:true });
 
-  /* ============== MOBILE MENU ============== */
+  /* ---------- mobile menu ---------- */
   const menu = document.getElementById('mobileMenu');
-  document.getElementById('menuBtn').onclick = ()=>menu.classList.add('open');
-  document.getElementById('closeBtn').onclick = ()=>menu.classList.remove('open');
-  document.querySelectorAll('.menu-link').forEach(l=>l.onclick=()=>menu.classList.remove('open'));
+  document.getElementById('menuBtn').onclick = () => menu.classList.add('open');
+  document.getElementById('closeBtn').onclick = () => menu.classList.remove('open');
+  document.querySelectorAll('.menu-link').forEach(l => l.onclick = () => menu.classList.remove('open'));
 
-  /* ============== COUNTER ============== */
-  const counters = document.querySelectorAll('[data-count]');
-  const animCount = (el)=>{
-    const target = parseFloat(el.dataset.count);
-    const isFloat = target % 1 !== 0;
-    let cur = 0; const step = target / 50;
-    const t = setInterval(()=>{
-      cur += step;
-      if(cur >= target){ cur = target; clearInterval(t); }
-      el.textContent = isFloat ? cur.toFixed(1) : Math.floor(cur);
-    }, 30);
-  };
-  const io = new IntersectionObserver((entries)=>{
-    entries.forEach(e=>{ if(e.isIntersecting){ animCount(e.target); io.unobserve(e.target); }});
-  });
-  counters.forEach(c=>io.observe(c));
-
-  /* ============== LIGHTBOX ============== */
-  function openLightbox(src){
-    document.getElementById('lightboxImg').src = src;
-    document.getElementById('lightbox').classList.add('active');
-  }
-  function closeLightbox(){ document.getElementById('lightbox').classList.remove('active'); }
-  document.getElementById('lightbox').addEventListener('click',e=>{ if(e.target.id==='lightbox') closeLightbox(); });
-  document.addEventListener('keydown',e=>{
-    if(e.key==='Escape') closeLightbox();
-    if(e.key==='ArrowRight') goTo(current+1);
-    if(e.key==='ArrowLeft') goTo(current-1);
-  });
-
-  /* ============== SMART IMAGE FALLBACK ============== */
-  document.querySelectorAll('.smart-img').forEach(img=>{
-    img.addEventListener('error', function(){
-      const fallbacks = (this.getAttribute('data-fallback')||'').split(',').map(s=>s.trim()).filter(Boolean);
-      if(fallbacks.length){
-        this.setAttribute('data-fallback', fallbacks.slice(1).join(','));
-        this.src = fallbacks[0];
-      }
+  /* ---------- counters ---------- */
+  const ioCount = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      const el = e.target;
+      const target = parseFloat(el.dataset.count);
+      const isFloat = target % 1 !== 0;
+      let cur = 0;
+      const step = target / 40;
+      const t = setInterval(() => {
+        cur += step;
+        if (cur >= target) { cur = target; clearInterval(t); }
+        el.textContent = isFloat ? cur.toFixed(1) : Math.floor(cur);
+      }, 25);
+      ioCount.unobserve(el);
     });
-  });
+  }, { threshold:0.4 });
+  document.querySelectorAll('[data-count]').forEach(c => ioCount.observe(c));
 
-  /* ================================================================
-     HERO CAROUSEL — ANDROID RECENT-APPS STYLE
-     ================================================================ */
+  /* ---------- LIGHTBOX ---------- */
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImg = document.getElementById('lightboxImg');
+  function openLightbox(src){ lightboxImg.src = src; lightbox.classList.add('active'); }
+  function closeLightbox(){ lightbox.classList.remove('active'); }
+  document.getElementById('closeLightboxBtn').onclick = closeLightbox;
+  lightbox.addEventListener('click', e => { if (e.target === lightbox) closeLightbox(); });
+
+  /* =========================================================
+     BULLETPROOF IMAGE LOADER
+     Tries exact name, then encoded space, then common variants
+     ========================================================= */
+  function loadSmartImage(img) {
+    const original = img.getAttribute('data-src') || img.getAttribute('src') || '';
+    if (!original) return;
+
+    // Build candidate list from the requested name
+    const name = original.trim();
+    const candidates = [];
+
+    // 1. as-is
+    candidates.push(name);
+    // 2. encodeURI (handles spaces → %20)
+    candidates.push(encodeURI(name));
+    // 3. replace spaces with %20 manually
+    candidates.push(name.replace(/ /g, '%20'));
+    // 4. replace spaces with nothing / hyphen
+    candidates.push(name.replace(/ /g, ''));
+    candidates.push(name.replace(/ /g, '-'));
+    // 5. common case variants
+    candidates.push(name.toLowerCase());
+    candidates.push(name.replace(/ /g, '%20').toLowerCase());
+
+    // Extra known aliases for this project
+    if (/bluetooth/i.test(name)) {
+      candidates.push('bluetooth%20.png', 'bluetooth .png', 'bluetooth.png', 'Bluetooth.png');
+    }
+    if (/lifestyle/i.test(name)) {
+      candidates.push('lifestyle.png', 'Lifestyle.png', 'lifestyle.PNG');
+    }
+    if (/premium/i.test(name)) {
+      candidates.push('premium-case.png', 'premium case.png', 'premium-case.PNG', 'premium-.png');
+    }
+    if (/secure/i.test(name)) {
+      candidates.push('secure-fit.png', 'secure fit.png', 'secure-fit.PNG', 'secure-fit..png');
+    }
+    if (/how-to-wear|how to wear/i.test(name)) {
+      candidates.push('how-to-wear.png', 'how to wear.png', 'how-to-wear.PNG');
+    }
+
+    // unique
+    const list = [...new Set(candidates.filter(Boolean))];
+    let i = 0;
+
+    const tryNext = () => {
+      if (i >= list.length) return; // give up silently
+      img.onload = () => { img.style.opacity = '1'; };
+      img.onerror = () => { i++; tryNext(); };
+      img.style.opacity = '0.01';
+      img.src = list[i];
+    };
+    tryNext();
+  }
+
+  // Apply to all .smart-img
+  document.querySelectorAll('.smart-img').forEach(loadSmartImage);
+
+  /* =========================================================
+     HERO CAROUSEL — NO SCROLL SIDE EFFECTS
+     ========================================================= */
   const slides = [
-    { src:'hero-1.png', label:'Signature Orange', color:'Carbon + Orange' },
-    { src:'hero-2.png', label:'Charging Case',    color:'Compact Cobble' },
-    { src:'hero-3.png', label:'Dynamic Design',   color:'Carbon Black' },
-    { src:'hero-4.png', label:'Precision Driver', color:'Internal View' },
-    { src:'hero-5.png', label:'Side Profile',     color:'Ergonomic Hook' },
-    { src:'hero-6.png', label:'In-Case View',     color:'Snap Charge' },
-    { src:'hero-7.png', label:'Frost White',      color:'Pure White' },
-    { src:'hero-8.png', label:'Shadow Grey',      color:'Matte Finish' },
-    { src:'hero-9.png', label:'Micro Detail',     color:'Craftsmanship' },
-    { src:'White-earbuds.png', label:'White Edition', color:'Limited Colour',
-      fallback:'White-ows.png,White-OWS.png,White-buds.png,White.png' }
+    { src:'hero-1.png', color:'Carbon + Orange' },
+    { src:'hero-2.png', color:'Compact Case' },
+    { src:'hero-3.png', color:'Carbon Black' },
+    { src:'hero-4.png', color:'In-Ear Detail' },
+    { src:'hero-5.png', color:'Side Profile' },
+    { src:'hero-6.png', color:'Open Case' },
+    { src:'hero-7.png', color:'Frost White' },
+    { src:'hero-8.png', color:'Shadow Grey' },
+    { src:'hero-9.png', color:'Micro Detail' }
   ];
 
   const stage = document.getElementById('heroStage');
   const thumbList = document.getElementById('thumbList');
-  const dotIndicators = document.getElementById('dotIndicators');
+  const dotsWrap = document.getElementById('dotIndicators');
   const totalEl = document.getElementById('totalSlides');
   const currentEl = document.getElementById('currentSlide');
-
   totalEl.textContent = slides.length;
 
-  // Build slides
-  slides.forEach((s, i)=>{
+  slides.forEach((s, i) => {
+    // main slide
     const slide = document.createElement('div');
-    slide.className = 'hero-slide' + (i===0?' active':'');
-    slide.dataset.index = i;
-    slide.innerHTML = `
-      <div class="variant-badge">${s.color}</div>
-      <img src="${s.src}" ${s.fallback?`data-fallback="${s.fallback}"`:''} alt="${s.label}" class="smart-img">
-    `;
-    stage.insertBefore(slide, stage.firstChild);
+    slide.className = 'hero-slide' + (i === 0 ? ' active' : '');
+    slide.innerHTML = `<div class="variant-badge">${s.color}</div><img alt="${s.color}">`;
+    const slideImg = slide.querySelector('img');
+    slideImg.setAttribute('data-src', s.src);
+    loadSmartImage(slideImg);
+    stage.insertBefore(slide, stage.firstChild.nextSibling); // keep controls on top
 
-    // Attach fallback error handler
-    const img = slide.querySelector('img');
-    img.addEventListener('error', function(){
-      const fb = (this.getAttribute('data-fallback')||'').split(',').map(s=>s.trim()).filter(Boolean);
-      if(fb.length){
-        this.setAttribute('data-fallback', fb.slice(1).join(','));
-        this.src = fb[0];
-      }
-    });
+    // actually insert before controls
+    stage.insertBefore(slide, document.getElementById('prevBtn'));
 
-    // Thumbnail
-    const thumb = document.createElement('div');
-    thumb.className = 'thumb' + (i===0?' active':'');
-    thumb.dataset.index = i;
-    thumb.innerHTML = `
-      <img src="${s.src}" ${s.fallback?`data-fallback="${s.fallback}"`:''} alt="${s.label}">
-      <div class="progress"></div>
-    `;
-    thumb.addEventListener('click', ()=> goTo(i, true));
+    // thumb
+    const thumb = document.createElement('button');
+    thumb.type = 'button';
+    thumb.className = 'thumb' + (i === 0 ? ' active' : '');
+    thumb.innerHTML = `<img alt=""><div class="progress"></div>`;
+    const tImg = thumb.querySelector('img');
+    tImg.setAttribute('data-src', s.src);
+    loadSmartImage(tImg);
+    thumb.addEventListener('click', () => goTo(i, true));
     thumbList.appendChild(thumb);
 
-    // Thumbnail image fallback
-    const tImg = thumb.querySelector('img');
-    tImg.addEventListener('error', function(){
-      const fb = (this.getAttribute('data-fallback')||'').split(',').map(s=>s.trim()).filter(Boolean);
-      if(fb.length){
-        this.setAttribute('data-fallback', fb.slice(1).join(','));
-        this.src = fb[0];
-      }
-    });
-
-    // Dot
-    const dotEl = document.createElement('div');
-    dotEl.className = 'dot' + (i===0?' active':'');
-    dotEl.addEventListener('click', ()=> goTo(i, true));
-    dotIndicators.appendChild(dotEl);
+    // dot
+    const d = document.createElement('button');
+    d.type = 'button';
+    d.className = 'dot' + (i === 0 ? ' active' : '');
+    d.setAttribute('aria-label', 'Go to slide ' + (i+1));
+    d.addEventListener('click', () => goTo(i, true));
+    dotsWrap.appendChild(d);
   });
 
   let current = 0;
-  let autoplayTimer;
-  const AUTOPLAY_MS = 5000;
+  let autoplayTimer = null;
+  let heroInView = true;
+  const AUTOPLAY_MS = 4500;
 
-  function goTo(index, userTriggered=false){
+  function goTo(index, userTriggered) {
     const slideEls = stage.querySelectorAll('.hero-slide');
     const thumbEls = thumbList.querySelectorAll('.thumb');
-    const dotEls = dotIndicators.querySelectorAll('.dot');
+    const dotEls = dotsWrap.querySelectorAll('.dot');
 
     index = (index + slides.length) % slides.length;
     const prev = current;
     current = index;
 
-    slideEls.forEach((s, i)=>{
-      s.classList.remove('active','prev');
-      if(i===index) s.classList.add('active');
-      else if(i===prev) s.classList.add('prev');
+    slideEls.forEach((s, i) => {
+      s.classList.remove('active', 'prev');
+      if (i === index) s.classList.add('active');
+      else if (i === prev) s.classList.add('prev');
     });
-
-    thumbEls.forEach((t,i)=> t.classList.toggle('active', i===index));
-    dotEls.forEach((d,i)=> d.classList.toggle('active', i===index));
-
-    // SCROLL FIX: Safely scroll container without moving the whole webpage
-    const activeThumb = thumbEls[index];
-    if(activeThumb){
-      const topPos = activeThumb.offsetTop - thumbList.offsetTop;
-      const centerPos = topPos - (thumbList.clientHeight / 2) + (activeThumb.clientHeight / 2);
-      thumbList.scrollTo({ top: centerPos, behavior: 'smooth' });
-    }
-
+    thumbEls.forEach((t, i) => t.classList.toggle('active', i === index));
+    dotEls.forEach((d, i) => d.classList.toggle('active', i === index));
     currentEl.textContent = index + 1;
 
-    if(userTriggered) restartAutoplay();
+    // ★ NO scrollIntoView / scrollTo / focus — ever
+    if (userTriggered) restartAutoplay();
   }
 
-  function next(){ goTo(current + 1); }
-  function prev(){ goTo(current - 1); }
+  function next() { goTo(current + 1, false); }
 
-  document.getElementById('nextBtn').addEventListener('click', ()=> goTo(current+1, true));
-  document.getElementById('prevBtn').addEventListener('click', ()=> goTo(current-1, true));
-
-  function startAutoplay(){
+  function startAutoplay() {
     stopAutoplay();
+    if (!heroInView) return; // only when hero visible
     autoplayTimer = setInterval(next, AUTOPLAY_MS);
   }
-  function stopAutoplay(){ clearInterval(autoplayTimer); }
-  function restartAutoplay(){ stopAutoplay(); startAutoplay(); }
+  function stopAutoplay() {
+    if (autoplayTimer) { clearInterval(autoplayTimer); autoplayTimer = null; }
+  }
+  function restartAutoplay() { stopAutoplay(); startAutoplay(); }
 
-  // Pause on hover
+  // Pause autoplay when hero leaves viewport → kills scroll-jump forever
+  const heroIO = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      heroInView = e.isIntersecting;
+      if (heroInView) startAutoplay();
+      else stopAutoplay();
+    });
+  }, { threshold: 0.15 });
+  heroIO.observe(document.getElementById('showcase'));
+
+  document.getElementById('nextBtn').addEventListener('click', () => goTo(current + 1, true));
+  document.getElementById('prevBtn').addEventListener('click', () => goTo(current - 1, true));
+
+  // pause while hovering stage
   stage.addEventListener('mouseenter', stopAutoplay);
-  stage.addEventListener('mouseleave', startAutoplay);
+  stage.addEventListener('mouseleave', () => { if (heroInView) startAutoplay(); });
 
-  // Swipe / drag support
-  let startX = 0, isDragging = false;
-  stage.addEventListener('mousedown', e=>{ startX = e.clientX; isDragging = true; });
-  stage.addEventListener('mouseup',   e=>{
-    if(!isDragging) return;
-    const diff = e.clientX - startX;
-    if(Math.abs(diff) > 50){ diff > 0 ? goTo(current-1, true) : goTo(current+1, true); }
-    isDragging = false;
-  });
-  stage.addEventListener('touchstart', e=>{ startX = e.touches[0].clientX; });
-  stage.addEventListener('touchend',   e=>{
+  // swipe
+  let startX = 0;
+  stage.addEventListener('touchstart', e => { startX = e.touches[0].clientX; }, { passive:true });
+  stage.addEventListener('touchend', e => {
     const diff = e.changedTouches[0].clientX - startX;
-    if(Math.abs(diff) > 50){ diff > 0 ? goTo(current-1, true) : goTo(current+1, true); }
+    if (Math.abs(diff) > 40) goTo(current + (diff < 0 ? 1 : -1), true);
+  }, { passive:true });
+
+  // click image → lightbox
+  stage.addEventListener('click', e => {
+    if (e.target.tagName === 'IMG') openLightbox(e.target.src);
   });
 
-  // Click main image to open lightbox
-  stage.addEventListener('click', e=>{
-    if(e.target.tagName === 'IMG') openLightbox(e.target.src);
+  // keyboard (only when not typing)
+  document.addEventListener('keydown', e => {
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowRight') goTo(current + 1, true);
+    if (e.key === 'ArrowLeft')  goTo(current - 1, true);
   });
 
-  // Hover cursor on interactive elements
-  document.querySelectorAll('a,button,.thumb,.layer-card,.dot').forEach(el=>{
-    el.addEventListener('mouseenter',()=>ring.classList.add('hover'));
-    el.addEventListener('mouseleave',()=>ring.classList.remove('hover'));
+  // cursor hover grow
+  document.querySelectorAll('a,button,.thumb,.layer-card,.dot').forEach(el => {
+    el.addEventListener('mouseenter', () => ring.classList.add('hover'));
+    el.addEventListener('mouseleave', () => ring.classList.remove('hover'));
   });
 
   startAutoplay();
+})();
 </script>
 </body>
 </html>
