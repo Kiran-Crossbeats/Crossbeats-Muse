@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#06060a">
 <title>Crossbeats MUSE | Open Wearable Stereo (OWS)</title>
 <meta name="description" content="Crossbeats Muse OWS — Open-ear earbuds with Bluetooth 6.0, 40H battery, 5-layer acoustic driver and premium ergonomic hook.">
 <script src="https://cdn.tailwindcss.com"></script>
@@ -104,6 +105,27 @@
   .lightbox{position:fixed;inset:0;background:rgba(0,0,0,.95);z-index:100;display:none;align-items:center;justify-content:center;padding:2rem;}
   .lightbox.active{display:flex;}
   .lightbox img{max-width:90%;max-height:85vh;border-radius:12px;}
+
+  /* Refined motion, focus states and resilient image rendering */
+  :focus-visible{outline:2px solid var(--orange);outline-offset:4px}
+  .glass,.glass-strong,.card-hover,.btn-primary,.thumb,.layer-card{
+    will-change:transform;
+  }
+  .glass{transition:background .35s ease,border-color .35s ease,box-shadow .35s ease,transform .45s cubic-bezier(.2,.8,.2,1)}
+  .glass:hover{border-color:rgba(255,106,0,.22)}
+  .lifestyle-wrap{position:relative;min-height:320px;background:radial-gradient(ellipse at 50% 40%,rgba(255,106,0,.12),transparent 68%),#0b0b11}
+  .lifestyle-img{min-height:320px;max-height:620px;object-fit:contain;cursor:zoom-in}
+  .image-fallback{min-height:320px;padding:2rem;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:.25rem}
+  .image-fallback.hidden{display:none}
+  .asset-image.is-missing{display:none}
+  .hero-slide img{object-fit:contain}
+  .hero-slide img.is-missing{visibility:hidden}
+  .thumb img.is-missing{visibility:hidden}
+  img{color:#a1a1aa}
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+  }
+
 </style>
 </head>
 <body class="antialiased selection:bg-orange-500 selection:text-white">
@@ -234,7 +256,19 @@
       </div>
     </div>
     <div class="lg:col-span-7 lifestyle-wrap overflow-hidden rounded-3xl gradient-border p-2" data-aos="fade-left">
-      <img src="lifestyle.png" alt="Crossbeats Muse Lifestyle" class="lifestyle-img">
+      <img
+        src="./lifestyle.png"
+        data-asset="lifestyle.png"
+        alt="Crossbeats Muse Lifestyle"
+        class="lifestyle-img asset-image"
+        loading="lazy"
+        decoding="async"
+      >
+      <div class="image-fallback hidden" role="status">
+        <span class="text-4xl mb-3">✦</span>
+        <strong class="text-white text-lg">Crossbeats Muse Lifestyle</strong>
+        <span class="text-zinc-400 text-sm mt-2">Place <code>lifestyle.png</code> beside this HTML file or inside an <code>assets</code> folder.</span>
+      </div>
     </div>
   </div>
 </section>
@@ -250,7 +284,7 @@
   <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
     <div class="lg:col-span-7" data-aos="zoom-in">
       <div class="gradient-border rounded-3xl p-2">
-        <img src="driver.png" alt="Driver Architecture" class="w-full rounded-2xl">
+        <img src="driver.png" data-asset="driver.png" loading="lazy" decoding="async" alt="Driver Architecture" class="w-full rounded-2xl">
       </div>
     </div>
     <div class="lg:col-span-5 space-y-3" data-aos="fade-left">
@@ -275,13 +309,13 @@
       <span class="text-xs font-bold text-orange-400 uppercase tracking-wider">Flagship Silicon</span>
       <h3 class="font-display text-3xl font-black mt-2 mb-3">Bluetooth 6.0</h3>
       <p class="text-zinc-400 text-sm mb-6">Smarter power use, stable connection, ultra-low audio lag for gaming and video.</p>
-      <img src="bluetooth%20.png" alt="Bluetooth 6.0" class="w-full rounded-2xl">
+      <img src="bluetooth.png" data-asset="bluetooth.png" loading="lazy" decoding="async" alt="Bluetooth 6.0" class="w-full rounded-2xl">
     </div>
     <div class="md:col-span-3 glass rounded-3xl p-8 card-hover" data-aos="fade-up" data-aos-delay="80">
       <span class="text-xs font-bold text-green-400 uppercase tracking-wider">Power That Lasts</span>
       <h3 class="font-display text-3xl font-black mt-2 mb-3">40H Playtime</h3>
       <p class="text-zinc-400 text-sm mb-6">Days without charging. Type-C snap charge for quick top-ups.</p>
-      <img src="battery.png" alt="40H Battery" class="w-full rounded-2xl">
+      <img src="battery.png" data-asset="battery.png" loading="lazy" decoding="async" alt="40H Battery" class="w-full rounded-2xl">
     </div>
     <div class="md:col-span-6 glass rounded-3xl p-8 md:p-12 card-hover grid grid-cols-1 lg:grid-cols-2 gap-8 items-center" data-aos="fade-up">
       <div class="space-y-5">
@@ -294,7 +328,7 @@
           <li class="flex items-center gap-3"><span class="w-6 h-6 rounded-full bg-orange-500/20 flex items-center justify-center text-orange-400 text-xs">✓</span><span><strong>One-hand flip ergonomics</strong></span></li>
         </ul>
       </div>
-      <div><img src="premium-case.png" alt="Premium Case" class="w-full rounded-2xl"></div>
+      <div><img src="premium-case.png" data-asset="premium-case.png" loading="lazy" decoding="async" alt="Premium Case" class="w-full rounded-2xl"></div>
     </div>
   </div>
 </section>
@@ -311,7 +345,7 @@
       <span class="text-xs font-bold text-orange-400 uppercase tracking-wider">Sports Ready</span>
       <h3 class="font-display text-2xl font-bold mt-2 mb-3">Secure Through Every Move</h3>
       <p class="text-zinc-400 text-sm mb-6">Flexible memory hook contours your ear — tested for workouts and sprints.</p>
-      <img src="secure-fit.png" alt="Secure Fit" class="w-full rounded-2xl">
+      <img src="secure-fit.png" data-asset="secure-fit.png" loading="lazy" decoding="async" alt="Secure Fit" class="w-full rounded-2xl">
     </div>
     <div class="glass rounded-3xl p-8 card-hover" data-aos="fade-left">
       <span class="text-xs font-bold text-orange-400 uppercase tracking-wider">Quick Guide</span>
@@ -321,7 +355,7 @@
         <p class="flex gap-3"><span class="font-bold text-orange-400">02</span> Guide the orange hook around ear rim</p>
         <p class="flex gap-3"><span class="font-bold text-orange-400">03</span> Centre until it feels secure</p>
       </div>
-      <img src="how-to-wear.png" alt="How to Wear" class="w-full rounded-2xl">
+      <img src="how-to-wear.png" data-asset="how-to-wear.png" loading="lazy" decoding="async" alt="How to Wear" class="w-full rounded-2xl">
     </div>
   </div>
 </section>
@@ -349,17 +383,67 @@
 <script>
 (function(){
   'use strict';
-  AOS.init({ duration:800, easing:'ease-out-cubic', once:true, offset:60 });
+
+  // Resolve common folder layouts without silently leaving broken image icons.
+  const assetCandidates = (name) => [
+    './' + name,
+    'assets/' + name,
+    './images/' + name,
+    'images/' + name
+  ];
+  function wireImageFallback(img, fallbackEl) {
+    if (!img) return;
+    const name = img.dataset.asset || img.getAttribute('src');
+    const candidates = assetCandidates(name.replace(/^\.\/|^assets\/|^images\//, ''));
+    let attempt = 0;
+    img.addEventListener('error', function retryAsset() {
+      while (attempt < candidates.length) {
+        const next = candidates[attempt++];
+        if (img.getAttribute('src') !== next) {
+          img.src = next;
+          return;
+        }
+      }
+      img.classList.add('is-missing');
+      if (fallbackEl) fallbackEl.classList.remove('hidden');
+    });
+    img.addEventListener('load', () => {
+      img.classList.remove('is-missing');
+      if (fallbackEl) fallbackEl.classList.add('hidden');
+    });
+    // Trigger resolver for already-failed cached images.
+    if (img.complete && img.naturalWidth === 0) {
+      img.dispatchEvent(new Event('error'));
+    }
+  }
+  document.querySelectorAll('img[data-asset]').forEach(img => {
+    wireImageFallback(img, img.parentElement.querySelector('.image-fallback'));
+  });
+  document.querySelectorAll('img:not([data-asset])').forEach(img => {
+    img.addEventListener('error', () => {
+      img.classList.add('is-missing');
+      img.alt = (img.alt || 'Product image') + ' — image file not found';
+    }, { once:true });
+  });
+  // AOS is optional; if its CDN is unavailable, reveal all content normally.
+  if (window.AOS) {
+    AOS.init({ duration:900, easing:'ease-out-cubic', once:true, offset:60, mirror:false });
+  } else {
+    document.querySelectorAll('[data-aos]').forEach(el => {
+      el.style.opacity = '1';
+      el.style.transform = 'none';
+    });
+  }
 
   const dot = document.querySelector('.cursor-dot');
   const ring = document.querySelector('.cursor-ring');
-  if (window.matchMedia('(min-width:769px)').matches) {
+  if (dot && ring && window.matchMedia('(min-width:769px)').matches) {
     document.addEventListener('mousemove', e => {
       dot.style.left = e.clientX + 'px';
       dot.style.top  = e.clientY + 'px';
       ring.style.left = e.clientX + 'px';
       ring.style.top  = e.clientY + 'px';
-    });
+    }, { passive:true });
   }
 
   window.addEventListener('scroll', () => {
@@ -372,7 +456,7 @@
   document.getElementById('closeBtn').onclick = () => menu.classList.remove('open');
   document.querySelectorAll('.menu-link').forEach(l => l.onclick = () => menu.classList.remove('open'));
 
-  const ioCount = new IntersectionObserver(entries => {
+  const ioCount = ('IntersectionObserver' in window) ? new IntersectionObserver(entries => {
     entries.forEach(e => {
       if (!e.isIntersecting) return;
       const el = e.target;
@@ -387,8 +471,11 @@
       }, 25);
       ioCount.unobserve(el);
     });
-  }, { threshold:0.4 });
-  document.querySelectorAll('[data-count]').forEach(c => ioCount.observe(c));
+  }, { threshold:0.4 }) : null;
+  document.querySelectorAll('[data-count]').forEach(c => {
+    if (ioCount) ioCount.observe(c);
+    else c.textContent = c.dataset.count;
+  });
 
   const lightbox = document.getElementById('lightbox');
   const lightboxImg = document.getElementById('lightboxImg');
@@ -417,13 +504,16 @@
   slides.forEach((s, i) => {
     const slide = document.createElement('div');
     slide.className = 'hero-slide' + (i === 0 ? ' active' : '');
-    slide.innerHTML = '<div class="variant-badge">'+s.color+'</div><img src="'+s.src+'" alt="'+s.color+'">';
+    slide.innerHTML = '<div class="variant-badge">'+s.color+'</div><img src="'+s.src+'" alt="'+s.color+'" loading="lazy" decoding="async">';
+    const slideImage = slide.querySelector('img');
+    wireImageFallback(slideImage, null);
     stage.insertBefore(slide, document.getElementById('prevBtn'));
 
     const thumb = document.createElement('button');
     thumb.type = 'button';
     thumb.className = 'thumb' + (i === 0 ? ' active' : '');
-    thumb.innerHTML = '<img src="'+s.src+'" alt="'+s.color+'"><div class="progress"></div>';
+    thumb.innerHTML = '<img src="'+s.src+'" alt="'+s.color+'" loading="lazy" decoding="async"><div class="progress"></div>';
+    wireImageFallback(thumb.querySelector('img'), null);
     thumb.addEventListener('click', () => goTo(i, true));
     thumbList.appendChild(thumb);
 
@@ -461,12 +551,14 @@
   function startAutoplay(){ stopAutoplay(); if (!heroInView) return; autoplayTimer = setInterval(next, 4500); }
   function restartAutoplay(){ stopAutoplay(); startAutoplay(); }
 
-  new IntersectionObserver(entries => {
-    entries.forEach(e => {
-      heroInView = e.isIntersecting;
-      if (heroInView) startAutoplay(); else stopAutoplay();
-    });
-  }, { threshold: 0.15 }).observe(document.getElementById('showcase'));
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        heroInView = e.isIntersecting;
+        if (heroInView) startAutoplay(); else stopAutoplay();
+      });
+    }, { threshold: 0.15 }).observe(document.getElementById('showcase'));
+  }
 
   document.getElementById('nextBtn').addEventListener('click', () => goTo(current + 1, true));
   document.getElementById('prevBtn').addEventListener('click', () => goTo(current - 1, true));
@@ -482,10 +574,12 @@
 
   stage.addEventListener('click', e => { if (e.target.tagName === 'IMG') openLightbox(e.target.src); });
 
-  document.querySelectorAll('a,button,.thumb,.layer-card,.dot').forEach(el => {
-    el.addEventListener('mouseenter', () => ring.classList.add('hover'));
-    el.addEventListener('mouseleave', () => ring.classList.remove('hover'));
-  });
+  if (ring) {
+    document.querySelectorAll('a,button,.thumb,.layer-card,.dot').forEach(el => {
+      el.addEventListener('mouseenter', () => ring.classList.add('hover'));
+      el.addEventListener('mouseleave', () => ring.classList.remove('hover'));
+    });
+  }
 
   startAutoplay();
 })();
