@@ -15,7 +15,9 @@
     --amber:#ffb347;
     --bg:#06060a;
   }
-  html,body{background:var(--bg);color:#f4f4f5;font-family:'Inter',sans-serif;cursor:none;}
+  *{-webkit-tap-highlight-color:transparent;}
+  html,body{background:var(--bg);color:#f4f4f5;font-family:'Inter',sans-serif;}
+  @media (min-width:769px){ html,body{cursor:none;} }
   .font-display{font-family:'Space Grotesk',sans-serif;letter-spacing:-0.02em;}
 
   /* --- Animated grid background --- */
@@ -37,7 +39,7 @@
   .cursor-dot{width:6px;height:6px;background:#ff6a00;transition:transform .1s;}
   .cursor-ring{width:36px;height:36px;border:1.5px solid rgba(255,106,0,0.6);transition:transform .2s ease, width .2s, height .2s, background .2s;}
   .cursor-ring.hover{width:60px;height:60px;background:rgba(255,106,0,0.1);border-color:#ff6a00;}
-  @media (max-width:768px){.cursor-dot,.cursor-ring{display:none;} html,body{cursor:auto;}}
+  @media (max-width:768px){.cursor-dot,.cursor-ring{display:none;}}
 
   /* --- Glass / cards --- */
   .glass{background:rgba(18,18,24,0.55);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.08);}
@@ -51,10 +53,6 @@
   /* --- Text gradient --- */
   .text-gradient{background:linear-gradient(135deg,#ff6a00 0%,#ffb347 50%,#ff6a00 100%);background-size:200% 200%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:gradient 4s ease infinite;}
   @keyframes gradient{0%,100%{background-position:0% 50%;}50%{background-position:100% 50%;}}
-
-  /* --- Hero image float --- */
-  .float-hero{animation:floatY 6s ease-in-out infinite;}
-  @keyframes floatY{0%,100%{transform:translateY(0);}50%{transform:translateY(-18px);}}
 
   /* --- Marquee --- */
   .marquee{overflow:hidden;}
@@ -76,7 +74,7 @@
   .scroll-progress{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,#ff6a00,#ffb347);z-index:9999;width:0;transition:width .1s;}
 
   /* --- Section numbering --- */
-  .section-num{font-family:'Space Grotesk',sans-serif;font-size:120px;font-weight:700;background:linear-gradient(180deg,rgba(255,106,0,.15),transparent);-webkit-background-clip:text;background-clip:text;color:transparent;line-height:1;}
+  .section-num{font-family:'Space Grotesk',sans-serif;font-size:120px;font-weight:700;background:linear-gradient(180deg,rgba(255,106,0,.15),transparent);-webkit-background-clip:text;background-clip:text;color:transparent;line-height:1;pointer-events:none;}
 
   /* --- Driver layer card hover --- */
   .layer-card{transition:all .4s;border-left:2px solid transparent;}
@@ -84,18 +82,166 @@
   .layer-card:hover .layer-num{background:#ff6a00;color:#fff;}
   .layer-num{transition:all .4s;}
 
-  /* --- Lightbox --- */
-  .lightbox{position:fixed;inset:0;background:rgba(0,0,0,.95);z-index:100;display:none;align-items:center;justify-content:center;padding:2rem;}
-  .lightbox.active{display:flex;animation:fadeIn .3s;}
-  @keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
-  .lightbox img{max-width:90%;max-height:85vh;border-radius:12px;}
-
   /* --- Mobile menu --- */
   .mobile-menu{transform:translateX(100%);transition:transform .4s cubic-bezier(.4,0,.2,1);}
   .mobile-menu.open{transform:translateX(0);}
 
   /* --- Noise overlay --- */
   .noise::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:1;opacity:.03;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence baseFrequency='0.9'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");}
+
+  /* ==========================================================
+     HERO CAROUSEL — Android recent-apps style
+     ========================================================== */
+  .hero-stage{
+    position:relative;
+    width:100%;
+    aspect-ratio: 1 / 1;
+    max-height:620px;
+    overflow:hidden;
+    border-radius:32px;
+    user-select:none;
+    touch-action:pan-y;
+  }
+  .hero-slide{
+    position:absolute; inset:0;
+    display:flex;align-items:center;justify-content:center;
+    padding:3rem;
+    opacity:0;
+    transform: translateX(100%) scale(.9) rotateY(-15deg);
+    transition: transform .9s cubic-bezier(.22,1,.36,1), opacity .7s ease, filter .7s ease;
+    filter: blur(10px);
+    will-change: transform, opacity;
+  }
+  .hero-slide.active{
+    opacity:1;
+    transform: translateX(0) scale(1) rotateY(0);
+    filter: blur(0);
+    z-index:2;
+  }
+  .hero-slide.prev{
+    opacity:0;
+    transform: translateX(-100%) scale(.9) rotateY(15deg);
+    filter: blur(10px);
+  }
+  .hero-slide img{
+    max-width:95%; max-height:95%;
+    object-fit:contain;
+    filter: drop-shadow(0 40px 60px rgba(255,106,0,.25)) drop-shadow(0 15px 25px rgba(0,0,0,.5));
+    animation: slideFloat 5s ease-in-out infinite;
+  }
+  @keyframes slideFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-15px);}}
+
+  /* Big gradient glow behind active slide */
+  .hero-stage::before{
+    content:'';position:absolute;inset:10%;
+    background: radial-gradient(circle, rgba(255,106,0,.35), transparent 60%);
+    filter: blur(60px); z-index:1; pointer-events:none;
+    animation: pulse 4s ease-in-out infinite;
+  }
+  @keyframes pulse{0%,100%{opacity:.7;}50%{opacity:1;}}
+
+  /* Thumbnails */
+  .thumb-list{
+    display:flex;flex-direction:column;gap:.75rem;
+    max-height:620px;overflow-y:auto;padding-right:.5rem;
+    scrollbar-width:thin;scrollbar-color:#ff6a00 transparent;
+  }
+  .thumb-list::-webkit-scrollbar{width:4px;}
+  .thumb-list::-webkit-scrollbar-thumb{background:#ff6a00;border-radius:4px;}
+
+  .thumb{
+    position:relative;
+    flex:0 0 auto;
+    width:100%;
+    aspect-ratio: 1 / 1;
+    border-radius:16px;
+    overflow:hidden;
+    cursor:pointer;
+    border:2px solid rgba(255,255,255,.06);
+    background: rgba(20,20,28,.5);
+    transition: all .4s cubic-bezier(.22,1,.36,1);
+  }
+  .thumb img{
+    width:100%;height:100%;object-fit:cover;
+    transition: transform .5s ease, filter .5s;
+    filter: grayscale(40%) brightness(.75);
+  }
+  .thumb:hover{ transform:translateX(6px); border-color:rgba(255,106,0,.5); }
+  .thumb:hover img{ filter: grayscale(0) brightness(1); transform:scale(1.08); }
+  .thumb.active{
+    border-color: #ff6a00;
+    box-shadow: 0 0 0 1px #ff6a00, 0 15px 40px -10px rgba(255,106,0,.6);
+    transform: translateX(10px) scale(1.03);
+  }
+  .thumb.active img{ filter:none; }
+  .thumb.active::before{
+    content:''; position:absolute; left:0; top:0; bottom:0; width:3px;
+    background: linear-gradient(180deg,#ff6a00,#ffb347); z-index:2;
+  }
+
+  /* Progress bar on active thumb */
+  .thumb .progress{
+    position:absolute; left:0; right:0; bottom:0; height:3px; z-index:3;
+    background: linear-gradient(90deg,#ff6a00,#ffb347);
+    width:0%;
+  }
+  .thumb.active .progress{ animation: thumbProgress 5s linear forwards; }
+  @keyframes thumbProgress{from{width:0%;}to{width:100%;}}
+
+  /* Carousel controls */
+  .carousel-ctrl{
+    position:absolute; top:50%; transform:translateY(-50%);
+    width:48px;height:48px;border-radius:9999px;
+    background: rgba(14,14,20,.7);backdrop-filter:blur(10px);
+    border:1px solid rgba(255,106,0,.3); color:#fff;
+    display:flex;align-items:center;justify-content:center;
+    cursor:pointer; z-index:5; transition:all .3s;
+    opacity:0;
+  }
+  .hero-stage:hover .carousel-ctrl{ opacity:1; }
+  .carousel-ctrl:hover{ background:#ff6a00; transform:translateY(-50%) scale(1.1); }
+  .ctrl-prev{left:16px;}
+  .ctrl-next{right:16px;}
+
+  /* Variant badge */
+  .variant-badge{
+    position:absolute;top:20px;left:20px;z-index:4;
+    padding:6px 14px;border-radius:9999px;
+    background:rgba(14,14,20,.8);backdrop-filter:blur(10px);
+    border:1px solid rgba(255,106,0,.3);
+    font-size:11px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;
+    color:#ff6a00;
+    opacity:0;transform:translateY(-10px);
+    transition: all .5s .3s;
+  }
+  .hero-slide.active .variant-badge{ opacity:1; transform:translateY(0); }
+
+  /* Dot indicators */
+  .dot-indicators{
+    position:absolute;bottom:16px;left:50%;transform:translateX(-50%);
+    display:flex;gap:8px;z-index:4;
+  }
+  .dot{
+    width:8px;height:8px;border-radius:9999px;background:rgba(255,255,255,.25);
+    cursor:pointer;transition:all .3s;
+  }
+  .dot.active{background:#ff6a00;width:28px;}
+
+  /* ==========================================================
+     LIFESTYLE SECTION
+     ========================================================== */
+  .lifestyle-img{
+    transition: all .8s cubic-bezier(.22,1,.36,1);
+  }
+  .lifestyle-wrap:hover .lifestyle-img{ transform:scale(1.03); }
+
+  /* ==========================================================
+     GALLERY LIGHTBOX
+     ========================================================== */
+  .lightbox{position:fixed;inset:0;background:rgba(0,0,0,.95);z-index:100;display:none;align-items:center;justify-content:center;padding:2rem;}
+  .lightbox.active{display:flex;animation:fadeIn .3s;}
+  @keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+  .lightbox img{max-width:90%;max-height:85vh;border-radius:12px;}
 </style>
 </head>
 <body class="antialiased selection:bg-orange-500 selection:text-white overflow-x-hidden noise">
@@ -123,10 +269,11 @@
       </div>
     </a>
     <div class="hidden lg:flex space-x-10 text-sm font-medium text-zinc-300">
+      <a href="#showcase" class="nav-link">Showcase</a>
+      <a href="#lifestyle" class="nav-link">Lifestyle</a>
       <a href="#acoustics" class="nav-link">Acoustics</a>
       <a href="#performance" class="nav-link">Performance</a>
       <a href="#fit" class="nav-link">Fit Guide</a>
-      <a href="#gallery" class="nav-link">Gallery</a>
     </div>
     <div class="flex items-center gap-3">
       <a href="#buy" class="hidden md:inline-block btn-primary text-white text-sm font-bold px-6 py-2.5 rounded-full">Pre-Order</a>
@@ -139,19 +286,22 @@
 <div id="mobileMenu" class="mobile-menu fixed top-0 right-0 h-full w-72 glass-strong z-50 p-8 pt-24 lg:hidden">
   <button id="closeBtn" class="absolute top-6 right-6 text-2xl text-white">✕</button>
   <nav class="flex flex-col gap-6 text-lg font-semibold">
+    <a href="#showcase" class="menu-link">Showcase</a>
+    <a href="#lifestyle" class="menu-link">Lifestyle</a>
     <a href="#acoustics" class="menu-link">Acoustics</a>
     <a href="#performance" class="menu-link">Performance</a>
     <a href="#fit" class="menu-link">Fit Guide</a>
-    <a href="#gallery" class="menu-link">Gallery</a>
     <a href="#buy" class="menu-link btn-primary text-center text-white px-6 py-3 rounded-full mt-4">Pre-Order</a>
   </nav>
 </div>
 
-<!-- ============== HERO ============== -->
-<section class="relative min-h-screen flex items-center pt-28 pb-16 px-6 overflow-hidden">
-  <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center w-full">
+<!-- ============== HERO + SHOWCASE CAROUSEL ============== -->
+<section id="showcase" class="relative min-h-screen flex items-center pt-28 pb-16 px-6">
+  <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center w-full">
 
-    <div class="lg:col-span-6 space-y-7" data-aos="fade-right">
+    <!-- LEFT: Title + Thumbnails -->
+    <div class="lg:col-span-5 space-y-7 order-2 lg:order-1" data-aos="fade-right">
+
       <div class="inline-flex items-center gap-2 py-2 px-4 rounded-full glass text-orange-400 text-xs font-bold uppercase tracking-widest">
         <span class="relative flex h-2 w-2">
           <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
@@ -160,33 +310,57 @@
         Open Wearable Stereo
       </div>
 
-      <h1 class="font-display text-5xl sm:text-7xl font-black leading-[0.95]">
+      <h1 class="font-display text-4xl sm:text-6xl font-black leading-[0.95]">
         Open Ear.<br>
         <span class="text-gradient">Infinite Sound.</span>
       </h1>
 
-      <p class="text-zinc-400 text-lg max-w-xl leading-relaxed">
-        Meet <strong class="text-white">Crossbeats Muse</strong> — featherlight open-ear earbuds engineered with <strong class="text-orange-400">Bluetooth 6.0</strong>, a <strong class="text-orange-400">5-layer acoustic driver</strong>, and <strong class="text-orange-400">40-hour</strong> playtime that keeps up with every beat of your day.
+      <p class="text-zinc-400 text-base md:text-lg max-w-xl leading-relaxed">
+        <strong class="text-white">Crossbeats Muse</strong> — featherlight open-ear earbuds with <strong class="text-orange-400">Bluetooth 6.0</strong>, a <strong class="text-orange-400">5-layer driver</strong>, and <strong class="text-orange-400">40-hour</strong> playtime.
       </p>
 
-      <div class="flex flex-wrap gap-4">
-        <a href="#acoustics" class="btn-primary text-white font-bold px-8 py-4 rounded-full inline-flex items-center gap-2">
-          Explore Technology <span>→</span>
-        </a>
-        <a href="#fit" class="glass hover:bg-white/5 text-white font-semibold px-8 py-4 rounded-full transition">How to Wear</a>
+      <!-- Thumbnail product switcher -->
+      <div>
+        <div class="flex items-center justify-between mb-3">
+          <span class="text-xs font-bold text-zinc-500 uppercase tracking-widest">Explore the Product</span>
+          <span class="text-xs text-zinc-500"><span id="currentSlide">1</span> / <span id="totalSlides">10</span></span>
+        </div>
+
+        <div class="grid grid-cols-5 lg:grid-cols-3 gap-2.5" id="thumbList">
+          <!-- Thumbnails injected by JS -->
+        </div>
       </div>
 
-      <div class="pt-6 grid grid-cols-3 gap-4 border-t border-white/10 max-w-lg">
-        <div><p class="font-display text-3xl font-bold text-gradient" data-count="6.0">0</p><p class="text-xs text-zinc-500 uppercase tracking-wider mt-1">Bluetooth</p></div>
-        <div><p class="font-display text-3xl font-bold text-gradient" data-count="40">0</p><p class="text-xs text-zinc-500 uppercase tracking-wider mt-1">Hour Battery</p></div>
-        <div><p class="font-display text-3xl font-bold text-gradient" data-count="5">0</p><p class="text-xs text-zinc-500 uppercase tracking-wider mt-1">Layer Driver</p></div>
+      <div class="pt-2 grid grid-cols-3 gap-4 border-t border-white/10 max-w-lg">
+        <div><p class="font-display text-2xl md:text-3xl font-bold text-gradient" data-count="6.0">0</p><p class="text-xs text-zinc-500 uppercase tracking-wider mt-1">Bluetooth</p></div>
+        <div><p class="font-display text-2xl md:text-3xl font-bold text-gradient" data-count="40">0</p><p class="text-xs text-zinc-500 uppercase tracking-wider mt-1">Hour Battery</p></div>
+        <div><p class="font-display text-2xl md:text-3xl font-bold text-gradient" data-count="5">0</p><p class="text-xs text-zinc-500 uppercase tracking-wider mt-1">Layer Driver</p></div>
       </div>
     </div>
 
-    <div class="lg:col-span-6 relative" data-aos="fade-left" data-aos-delay="200">
-      <div class="absolute inset-0 bg-gradient-to-r from-orange-500/20 to-amber-500/20 blur-3xl rounded-full"></div>
-      <div class="relative gradient-border rounded-[32px] p-3 float-hero">
-        <img src="hero.png" data-fallback="hero.PNG" alt="Crossbeats Muse OWS" class="smart-img w-full rounded-3xl">
+    <!-- RIGHT: Main carousel stage -->
+    <div class="lg:col-span-7 order-1 lg:order-2" data-aos="fade-left" data-aos-delay="200">
+      <div class="gradient-border rounded-[36px] p-2">
+        <div class="hero-stage glass" id="heroStage">
+          <!-- Slides injected by JS -->
+
+          <button class="carousel-ctrl ctrl-prev" id="prevBtn" aria-label="Previous">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+          </button>
+          <button class="carousel-ctrl ctrl-next" id="nextBtn" aria-label="Next">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+
+          <div class="dot-indicators" id="dotIndicators"></div>
+        </div>
+      </div>
+
+      <!-- CTAs under carousel -->
+      <div class="flex flex-wrap gap-4 justify-center mt-6">
+        <a href="#acoustics" class="btn-primary text-white font-bold px-8 py-3.5 rounded-full inline-flex items-center gap-2">
+          Explore Technology <span>→</span>
+        </a>
+        <a href="#fit" class="glass hover:bg-white/5 text-white font-semibold px-8 py-3.5 rounded-full transition">How to Wear</a>
       </div>
     </div>
 
@@ -202,7 +376,6 @@
     <span>CRYSTAL CLEAR CALLS</span><span class="text-orange-500">●</span>
     <span>5-LAYER DRIVER</span><span class="text-orange-500">●</span>
     <span>IP RATED SWEAT PROOF</span><span class="text-orange-500">●</span>
-    <!-- duplicate for seamless loop -->
     <span>OPEN EAR DESIGN</span><span class="text-orange-500">●</span>
     <span>BLUETOOTH 6.0</span><span class="text-orange-500">●</span>
     <span>40 HOUR BATTERY</span><span class="text-orange-500">●</span>
@@ -211,6 +384,44 @@
     <span>IP RATED SWEAT PROOF</span><span class="text-orange-500">●</span>
   </div>
 </div>
+
+<!-- ============== LIFESTYLE SECTION ============== -->
+<section id="lifestyle" class="relative py-28 px-6 max-w-7xl mx-auto">
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+    <div class="lg:col-span-5 space-y-6" data-aos="fade-right">
+      <span class="text-orange-500 text-xs font-bold uppercase tracking-widest">A Lifestyle Statement</span>
+      <h2 class="font-display text-4xl md:text-6xl font-black">More than audio. <span class="text-gradient">A Lifestyle.</span></h2>
+      <p class="text-zinc-400 text-lg leading-relaxed">
+        Designed for the way you live — from morning commutes and intense workouts to late-night calls and weekend adventures. Muse OWS blends into your day with featherweight comfort and a signature look.
+      </p>
+      <div class="grid grid-cols-2 gap-4 pt-4">
+        <div class="glass p-5 rounded-2xl">
+          <div class="text-2xl mb-2">🏃</div>
+          <h4 class="font-bold text-white mb-1">Active Life</h4>
+          <p class="text-xs text-zinc-500">Workouts, runs, sports</p>
+        </div>
+        <div class="glass p-5 rounded-2xl">
+          <div class="text-2xl mb-2">💼</div>
+          <h4 class="font-bold text-white mb-1">Work Mode</h4>
+          <p class="text-xs text-zinc-500">Calls, meetings, focus</p>
+        </div>
+        <div class="glass p-5 rounded-2xl">
+          <div class="text-2xl mb-2">🎵</div>
+          <h4 class="font-bold text-white mb-1">Daily Jam</h4>
+          <p class="text-xs text-zinc-500">Commute, chill, repeat</p>
+        </div>
+        <div class="glass p-5 rounded-2xl">
+          <div class="text-2xl mb-2">✈️</div>
+          <h4 class="font-bold text-white mb-1">Travel Ready</h4>
+          <p class="text-xs text-zinc-500">Snap charge, 40h battery</p>
+        </div>
+      </div>
+    </div>
+    <div class="lg:col-span-7 lifestyle-wrap overflow-hidden rounded-3xl gradient-border p-2" data-aos="fade-left">
+      <img src="lifestyle.png" alt="Crossbeats Muse Lifestyle" class="smart-img lifestyle-img w-full rounded-2xl">
+    </div>
+  </div>
+</section>
 
 <!-- ============== ACOUSTICS ============== -->
 <section id="acoustics" class="relative py-28 px-6 max-w-7xl mx-auto">
@@ -275,7 +486,7 @@
       <span class="text-xs font-bold text-green-400 uppercase tracking-wider">Power That Lasts</span>
       <h3 class="font-display text-3xl font-black mt-2 mb-3">40H Playtime</h3>
       <p class="text-zinc-400 text-sm mb-6">Days without charging. Type-C snap charge for quick top-ups on the go.</p>
-      <img src="battery.png" data-fallback="battery%20and%20performance%20.png,battery and performance .png,battery%20and%20performance.png,battery and performance.png,Battery.png" alt="40H Battery" class="smart-img w-full rounded-2xl">
+      <img src="battery.png" alt="40H Battery" class="smart-img w-full rounded-2xl">
     </div>
 
     <div class="md:col-span-6 glass rounded-3xl p-8 md:p-12 card-hover grid grid-cols-1 lg:grid-cols-2 gap-8 items-center" data-aos="fade-up">
@@ -289,7 +500,7 @@
           <li class="flex items-center gap-3"><span class="w-6 h-6 rounded-full bg-orange-500/20 flex items-center justify-center text-orange-400 text-xs">✓</span><span><strong>Cobble Ergonomics</strong> — one-hand flip</span></li>
         </ul>
       </div>
-      <div><img src="premium-case.png" data-fallback="premium%20case.png,premium case.png" alt="Premium Case" class="smart-img w-full rounded-2xl"></div>
+      <div><img src="premium-case.png" alt="Premium Case" class="smart-img w-full rounded-2xl"></div>
     </div>
 
   </div>
@@ -309,7 +520,7 @@
       <span class="text-xs font-bold text-orange-400 uppercase tracking-wider">Sports Ready</span>
       <h3 class="font-display text-2xl font-bold mt-2 mb-3">Secure Through Every Move</h3>
       <p class="text-zinc-400 text-sm mb-6">Tested for workouts, court sports and outdoor sprints — the flexible memory hook contours your ear.</p>
-      <img src="secure-fit.png" data-fallback="secure%20fit.png,secure fit.png" alt="Secure Fit" class="smart-img w-full rounded-2xl">
+      <img src="secure-fit.png" alt="Secure Fit" class="smart-img w-full rounded-2xl">
     </div>
 
     <div class="glass rounded-3xl p-8 card-hover" data-aos="fade-left">
@@ -320,51 +531,7 @@
         <p class="flex gap-3"><span class="font-bold text-orange-400">02</span> Guide the orange hook around ear rim</p>
         <p class="flex gap-3"><span class="font-bold text-orange-400">03</span> Centre until it feels secure</p>
       </div>
-      <img src="how-to-wear.png" data-fallback="how%20to%20wear.png,how to wear.png" alt="How to Wear" class="smart-img w-full rounded-2xl">
-    </div>
-  </div>
-</section>
-
-<!-- ============== GALLERY ============== -->
-<section id="gallery" class="relative py-28 px-6 max-w-6xl mx-auto">
-  <div class="absolute left-0 top-10 section-num hidden md:block">04</div>
-
-  <div class="text-center mb-14" data-aos="fade-up">
-    <span class="text-orange-500 text-xs font-bold uppercase tracking-widest">Visual Showcase</span>
-    <h2 class="font-display text-4xl md:text-6xl font-black mt-3">Every Angle. <span class="text-gradient">Perfected.</span></h2>
-  </div>
-
-  <div class="grid grid-cols-2 md:grid-cols-4 gap-4" data-aos="fade-up">
-    <div class="gallery-item relative overflow-hidden rounded-2xl aspect-square cursor-pointer group">
-      <img src="hero.png" class="smart-img w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Hero">
-      <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-4 opacity-0 group-hover:opacity-100 transition"><span class="text-white font-semibold">Hero Shot</span></div>
-    </div>
-    <div class="gallery-item relative overflow-hidden rounded-2xl aspect-square cursor-pointer group">
-      <img src="premium-case.png" data-fallback="premium%20case.png,premium case.png" class="smart-img w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Case">
-      <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-4 opacity-0 group-hover:opacity-100 transition"><span class="text-white font-semibold">Premium Case</span></div>
-    </div>
-    <div class="gallery-item relative overflow-hidden rounded-2xl aspect-square cursor-pointer group">
-      <img src="driver.png" class="smart-img w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Driver">
-      <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-4 opacity-0 group-hover:opacity-100 transition"><span class="text-white font-semibold">5-Layer Driver</span></div>
-    </div>
-    <div class="gallery-item relative overflow-hidden rounded-2xl aspect-square cursor-pointer group">
-      <img src="bluetooth.png" data-fallback="bluetooth%20.png,bluetooth .png" class="smart-img w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="BT">
-      <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-4 opacity-0 group-hover:opacity-100 transition"><span class="text-white font-semibold">Bluetooth 6.0</span></div>
-    </div>
-    <div class="gallery-item relative overflow-hidden rounded-2xl aspect-square cursor-pointer group">
-      <img src="battery.png" data-fallback="battery%20and%20performance%20.png,battery and performance .png,battery%20and%20performance.png" class="smart-img w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Battery">
-      <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-4 opacity-0 group-hover:opacity-100 transition"><span class="text-white font-semibold">40H Battery</span></div>
-    </div>
-    <div class="gallery-item relative overflow-hidden rounded-2xl aspect-square cursor-pointer group">
-      <img src="secure-fit.png" data-fallback="secure%20fit.png,secure fit.png" class="smart-img w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Fit">
-      <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-4 opacity-0 group-hover:opacity-100 transition"><span class="text-white font-semibold">Secure Fit</span></div>
-    </div>
-    <div class="gallery-item relative overflow-hidden rounded-2xl aspect-square cursor-pointer group">
-      <img src="how-to-wear.png" data-fallback="how%20to%20wear.png,how to wear.png" class="smart-img w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Wear">
-      <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-4 opacity-0 group-hover:opacity-100 transition"><span class="text-white font-semibold">How to Wear</span></div>
-    </div>
-    <div class="gallery-item relative overflow-hidden rounded-2xl aspect-square cursor-pointer group gradient-border flex items-center justify-center text-center p-6">
-      <div><p class="text-gradient font-display font-black text-2xl">MUSE</p><p class="text-xs text-zinc-500 uppercase tracking-widest mt-2">By Crossbeats</p></div>
+      <img src="how-to-wear.png" alt="How to Wear" class="smart-img w-full rounded-2xl">
     </div>
   </div>
 </section>
@@ -394,38 +561,33 @@
 <script>
   AOS.init({ duration:900, easing:'ease-out-cubic', once:true, offset:80 });
 
-  // Custom cursor
+  /* ============== CUSTOM CURSOR ============== */
   const dot = document.querySelector('.cursor-dot');
   const ring = document.querySelector('.cursor-ring');
   document.addEventListener('mousemove', e=>{
     dot.style.left = e.clientX+'px'; dot.style.top = e.clientY+'px';
     ring.style.left = e.clientX+'px'; ring.style.top = e.clientY+'px';
   });
-  document.querySelectorAll('a,button,.gallery-item,.layer-card').forEach(el=>{
-    el.addEventListener('mouseenter',()=>ring.classList.add('hover'));
-    el.addEventListener('mouseleave',()=>ring.classList.remove('hover'));
-  });
 
-  // Scroll progress
+  /* ============== SCROLL PROGRESS ============== */
   window.addEventListener('scroll',()=>{
     const h = document.documentElement;
     const p = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
     document.getElementById('progress').style.width = p+'%';
   });
 
-  // Mobile menu
+  /* ============== MOBILE MENU ============== */
   const menu = document.getElementById('mobileMenu');
   document.getElementById('menuBtn').onclick = ()=>menu.classList.add('open');
   document.getElementById('closeBtn').onclick = ()=>menu.classList.remove('open');
   document.querySelectorAll('.menu-link').forEach(l=>l.onclick=()=>menu.classList.remove('open'));
 
-  // Counter animation
+  /* ============== COUNTER ============== */
   const counters = document.querySelectorAll('[data-count]');
   const animCount = (el)=>{
     const target = parseFloat(el.dataset.count);
     const isFloat = target % 1 !== 0;
-    let cur = 0;
-    const step = target / 50;
+    let cur = 0; const step = target / 50;
     const t = setInterval(()=>{
       cur += step;
       if(cur >= target){ cur = target; clearInterval(t); }
@@ -437,18 +599,20 @@
   });
   counters.forEach(c=>io.observe(c));
 
-  // Lightbox
-  document.querySelectorAll('.gallery-item img').forEach(img=>{
-    img.addEventListener('click',()=>{
-      document.getElementById('lightboxImg').src = img.src;
-      document.getElementById('lightbox').classList.add('active');
-    });
-  });
+  /* ============== LIGHTBOX ============== */
+  function openLightbox(src){
+    document.getElementById('lightboxImg').src = src;
+    document.getElementById('lightbox').classList.add('active');
+  }
   function closeLightbox(){ document.getElementById('lightbox').classList.remove('active'); }
   document.getElementById('lightbox').addEventListener('click',e=>{ if(e.target.id==='lightbox') closeLightbox(); });
-  document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeLightbox(); });
+  document.addEventListener('keydown',e=>{
+    if(e.key==='Escape') closeLightbox();
+    if(e.key==='ArrowRight') goTo(current+1);
+    if(e.key==='ArrowLeft') goTo(current-1);
+  });
 
-  // Smart image fallback (handles spaces, hyphens, caps)
+  /* ============== SMART IMAGE FALLBACK ============== */
   document.querySelectorAll('.smart-img').forEach(img=>{
     img.addEventListener('error', function(){
       const fallbacks = (this.getAttribute('data-fallback')||'').split(',').map(s=>s.trim()).filter(Boolean);
@@ -458,7 +622,158 @@
       }
     });
   });
+
+  /* ================================================================
+     HERO CAROUSEL — ANDROID RECENT-APPS STYLE
+     ================================================================ */
+  const slides = [
+    { src:'hero-1.png', label:'Signature Orange', color:'Carbon + Orange' },
+    { src:'hero-2.png', label:'Charging Case',    color:'Compact Cobble' },
+    { src:'hero-3.png', label:'Dynamic Design',   color:'Carbon Black' },
+    { src:'hero-4.png', label:'Precision Driver', color:'Internal View' },
+    { src:'hero-5.png', label:'Side Profile',     color:'Ergonomic Hook' },
+    { src:'hero-6.png', label:'In-Case View',     color:'Snap Charge' },
+    { src:'hero-7.png', label:'Frost White',      color:'Pure White' },
+    { src:'hero-8.png', label:'Shadow Grey',      color:'Matte Finish' },
+    { src:'hero-9.png', label:'Micro Detail',     color:'Craftsmanship' },
+    { src:'White-earbuds.png', label:'White Edition', color:'Limited Colour',
+      fallback:'White-ows.png,White-OWS.png,White-buds.png,White.png' }
+  ];
+
+  const stage = document.getElementById('heroStage');
+  const thumbList = document.getElementById('thumbList');
+  const dotIndicators = document.getElementById('dotIndicators');
+  const totalEl = document.getElementById('totalSlides');
+  const currentEl = document.getElementById('currentSlide');
+
+  totalEl.textContent = slides.length;
+
+  // Build slides
+  slides.forEach((s, i)=>{
+    const slide = document.createElement('div');
+    slide.className = 'hero-slide' + (i===0?' active':'');
+    slide.dataset.index = i;
+    slide.innerHTML = `
+      <div class="variant-badge">${s.color}</div>
+      <img src="${s.src}" ${s.fallback?`data-fallback="${s.fallback}"`:''} alt="${s.label}" class="smart-img">
+    `;
+    stage.insertBefore(slide, stage.firstChild);
+
+    // Attach fallback error handler
+    const img = slide.querySelector('img');
+    img.addEventListener('error', function(){
+      const fb = (this.getAttribute('data-fallback')||'').split(',').map(s=>s.trim()).filter(Boolean);
+      if(fb.length){
+        this.setAttribute('data-fallback', fb.slice(1).join(','));
+        this.src = fb[0];
+      }
+    });
+
+    // Thumbnail
+    const thumb = document.createElement('div');
+    thumb.className = 'thumb' + (i===0?' active':'');
+    thumb.dataset.index = i;
+    thumb.innerHTML = `
+      <img src="${s.src}" ${s.fallback?`data-fallback="${s.fallback}"`:''} alt="${s.label}">
+      <div class="progress"></div>
+    `;
+    thumb.addEventListener('click', ()=> goTo(i, true));
+    thumbList.appendChild(thumb);
+
+    // Thumbnail image fallback
+    const tImg = thumb.querySelector('img');
+    tImg.addEventListener('error', function(){
+      const fb = (this.getAttribute('data-fallback')||'').split(',').map(s=>s.trim()).filter(Boolean);
+      if(fb.length){
+        this.setAttribute('data-fallback', fb.slice(1).join(','));
+        this.src = fb[0];
+      }
+    });
+
+    // Dot
+    const dotEl = document.createElement('div');
+    dotEl.className = 'dot' + (i===0?' active':'');
+    dotEl.addEventListener('click', ()=> goTo(i, true));
+    dotIndicators.appendChild(dotEl);
+  });
+
+  let current = 0;
+  let autoplayTimer;
+  const AUTOPLAY_MS = 5000;
+
+  function goTo(index, userTriggered=false){
+    const slideEls = stage.querySelectorAll('.hero-slide');
+    const thumbEls = thumbList.querySelectorAll('.thumb');
+    const dotEls = dotIndicators.querySelectorAll('.dot');
+
+    index = (index + slides.length) % slides.length;
+    const prev = current;
+    current = index;
+
+    slideEls.forEach((s, i)=>{
+      s.classList.remove('active','prev');
+      if(i===index) s.classList.add('active');
+      else if(i===prev) s.classList.add('prev');
+    });
+
+    thumbEls.forEach((t,i)=> t.classList.toggle('active', i===index));
+    dotEls.forEach((d,i)=> d.classList.toggle('active', i===index));
+
+    // Scroll active thumb into view
+    const activeThumb = thumbEls[index];
+    if(activeThumb && activeThumb.scrollIntoView){
+      activeThumb.scrollIntoView({ behavior:'smooth', block:'nearest' });
+    }
+
+    currentEl.textContent = index + 1;
+
+    if(userTriggered) restartAutoplay();
+  }
+
+  function next(){ goTo(current + 1); }
+  function prev(){ goTo(current - 1); }
+
+  document.getElementById('nextBtn').addEventListener('click', ()=> goTo(current+1, true));
+  document.getElementById('prevBtn').addEventListener('click', ()=> goTo(current-1, true));
+
+  function startAutoplay(){
+    stopAutoplay();
+    autoplayTimer = setInterval(next, AUTOPLAY_MS);
+  }
+  function stopAutoplay(){ clearInterval(autoplayTimer); }
+  function restartAutoplay(){ stopAutoplay(); startAutoplay(); }
+
+  // Pause on hover
+  stage.addEventListener('mouseenter', stopAutoplay);
+  stage.addEventListener('mouseleave', startAutoplay);
+
+  // Swipe / drag support
+  let startX = 0, isDragging = false;
+  stage.addEventListener('mousedown', e=>{ startX = e.clientX; isDragging = true; });
+  stage.addEventListener('mouseup',   e=>{
+    if(!isDragging) return;
+    const diff = e.clientX - startX;
+    if(Math.abs(diff) > 50){ diff > 0 ? goTo(current-1, true) : goTo(current+1, true); }
+    isDragging = false;
+  });
+  stage.addEventListener('touchstart', e=>{ startX = e.touches[0].clientX; });
+  stage.addEventListener('touchend',   e=>{
+    const diff = e.changedTouches[0].clientX - startX;
+    if(Math.abs(diff) > 50){ diff > 0 ? goTo(current-1, true) : goTo(current+1, true); }
+  });
+
+  // Click main image to open lightbox
+  stage.addEventListener('click', e=>{
+    if(e.target.tagName === 'IMG') openLightbox(e.target.src);
+  });
+
+  // Hover cursor on interactive elements
+  document.querySelectorAll('a,button,.thumb,.layer-card,.dot').forEach(el=>{
+    el.addEventListener('mouseenter',()=>ring.classList.add('hover'));
+    el.addEventListener('mouseleave',()=>ring.classList.remove('hover'));
+  });
+
+  startAutoplay();
 </script>
 </body>
 </html>
-!
